@@ -43,7 +43,7 @@ class Controller < OSX::NSObject
     image_name = NSBundle.mainBundle.pathForResource_ofType('stretch', 'tiff')
     image = NSImage.alloc.initWithContentsOfFile(image_name)
     status_item.setImage(image)  # TODO: fix the image
-    status_item.setTitle("AH")
+    status_item.setTitle("AH")   
 
     menu = NSMenu.alloc.init
     status_item.setMenu(menu)
