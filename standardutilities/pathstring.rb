@@ -63,6 +63,7 @@ class Pathstring < String
   # Differs from Pathname in that it will raise an error if first char of self is ~
   def exist?
     raise "Will not give a relevant answer for path '#{self}', since it starts with ~ and therefore by definition does not exist." if self[0..0] == '~'
+    return File.exists?(self.to_s) 
   end
   
   

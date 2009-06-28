@@ -1,7 +1,10 @@
-require "test/unit"
-require 'rubygems'
-require 'shoulda'
-require 'assert2'
+#require "test/unit"
+#require 'rubygems'
+#require 'shoulda'
+#require 'assert2'
+
+require 'test_setup'
+
 require 'fileutils'
 require 'model_video_archive'
 require 'controller_preferences'
