@@ -231,6 +231,8 @@
 			<key>Layout</key>
 			<array>
 				<dict>
+					<key>BecomeActive</key>
+					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -267,13 +269,17 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateExpansionKey</key>
 							<array>
 								<string>29B97314FDCFA39411CA2CEA</string>
+								<string>6510B2270FF6A1FB00672B62</string>
 								<string>080E96DDFE201D6D7F000001</string>
+								<string>6510B2460FF6D1B900672B62</string>
 								<string>29B97315FDCFA39411CA2CEA</string>
+								<string>29B97317FDCFA39411CA2CEA</string>
 								<string>1C37FABC05509CD000000102</string>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
+									<integer>15</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -325,7 +331,7 @@
 										<key>_historyCapacity</key>
 										<integer>40</integer>
 										<key>bookmark</key>
-										<string>6510BD2F0FF7815A00672B62</string>
+										<string>6510BD370FF7C52200672B62</string>
 										<key>history</key>
 										<array>
 											<string>6510BCF90FF765E700672B62</string>
@@ -355,8 +361,6 @@
 							<string>285pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -531,10 +535,10 @@
 	<array>
 		<string>6510BD140FF7731900672B62</string>
 		<string>6510BD150FF7731900672B62</string>
-		<string>1C78EAAD065D492600B07095</string>
 		<string>1CD10A99069EF8BA00B06720</string>
-		<string>/Users/Tommy/Programmering/Ruby/Projekt/ItunesFeeder/ItunesFeeder.xcodeproj</string>
 		<string>6510B22E0FF6A4EA00672B62</string>
+		<string>/Users/Tommy/Programmering/Ruby/Projekt/ItunesFeeder/ItunesFeeder.xcodeproj</string>
+		<string>1C78EAAD065D492600B07095</string>
 	</array>
 	<key>WindowString</key>
 	<string>82 348 788 504 0 0 1440 878 </string>
@@ -627,7 +631,7 @@
 			<key>WindowToolGUID</key>
 			<string>6510B22E0FF6A4EA00672B62</string>
 			<key>WindowToolIsVisible</key>
-			<true/>
+			<false/>
 		</dict>
 		<dict>
 			<key>FirstTimeWindowDisplayed</key>
@@ -916,7 +920,7 @@
 			<key>WindowToolGUID</key>
 			<string>1C78EAAD065D492600B07095</string>
 			<key>WindowToolIsVisible</key>
-			<false/>
+			<true/>
 		</dict>
 		<dict>
 			<key>Identifier</key>
