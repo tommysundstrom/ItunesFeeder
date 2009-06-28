@@ -19,6 +19,8 @@
 		6510BCD90FF6D1BC00672B62 /* test in Resources */ = {isa = PBXBuildFile; fileRef = 6510B24B0FF6D1B900672B62 /* test */; };
 		6510BCDE0FF6D1FB00672B62 /* controller.rb in Resources */ = {isa = PBXBuildFile; fileRef = 6510BCDD0FF6D1FB00672B62 /* controller.rb */; };
 		6510BD090FF7706F00672B62 /* filesystem.rb in Resources */ = {isa = PBXBuildFile; fileRef = 6510BD070FF7706F00672B62 /* filesystem.rb */; };
+		6510BD3F0FF7D37100672B62 /* controller_preferences.rb in Resources */ = {isa = PBXBuildFile; fileRef = 6510BD3D0FF7D37100672B62 /* controller_preferences.rb */; };
+		6510BD400FF7D37100672B62 /* Rakefile in Resources */ = {isa = PBXBuildFile; fileRef = 6510BD3E0FF7D37100672B62 /* Rakefile */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		6510B24B0FF6D1B900672B62 /* test */ = {isa = PBXFileReference; lastKnownFileType = folder; path = test; sourceTree = "<group>"; };
 		6510BCDD0FF6D1FB00672B62 /* controller.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = controller.rb; sourceTree = "<group>"; };
 		6510BD070FF7706F00672B62 /* filesystem.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = filesystem.rb; sourceTree = "<group>"; };
+		6510BD3D0FF7D37100672B62 /* controller_preferences.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = controller_preferences.rb; sourceTree = "<group>"; };
+		6510BD3E0FF7D37100672B62 /* Rakefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Rakefile; sourceTree = "<group>"; };
 		E8F5E24E03AEB6EC03A81C6F /* RubyCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RubyCocoa.framework; path = /System/Library/Frameworks/RubyCocoa.framework; sourceTree = "<absolute>"; };
 		E8F5E25803AEB7C803A81C6F /* rb_main.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = rb_main.rb; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -116,6 +120,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6510BD3D0FF7D37100672B62 /* controller_preferences.rb */,
+				6510BD3E0FF7D37100672B62 /* Rakefile */,
 				6510BD070FF7706F00672B62 /* filesystem.rb */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
@@ -195,6 +201,8 @@
 				6510BCD90FF6D1BC00672B62 /* test in Resources */,
 				6510BCDE0FF6D1FB00672B62 /* controller.rb in Resources */,
 				6510BD090FF7706F00672B62 /* filesystem.rb in Resources */,
+				6510BD3F0FF7D37100672B62 /* controller_preferences.rb in Resources */,
+				6510BD400FF7D37100672B62 /* Rakefile in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
