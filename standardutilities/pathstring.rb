@@ -59,6 +59,11 @@ class Pathstring < String
     path = path.dirname if path.file? # Make sure the directory for the file exists
     Pathname(path).mkpath
   end
+
+  # Differs from Pathname in that it will raise an error if first char of self is ~
+  def exist?
+    raise "Will not give a relevant answer for path '#{self}', since it starts with ~ and therefore by definition does not exist." if self[0..0] == '~'
+  end
   
   
   # Added functions

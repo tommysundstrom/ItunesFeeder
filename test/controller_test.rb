@@ -8,7 +8,8 @@ class ControllerTest < Test::Unit::TestCase
   # Called before every test method runs. Can be used
   # to set up fixture information.
   def setup
-    # Do nothing
+    @rblog = Log.new(__FILE__)
+    @rblog.debug "Initializing #{self.to_s}."
   end
 
   # Called after every test method runs. Can be used to tear

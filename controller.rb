@@ -1,9 +1,6 @@
 require 'osx/cocoa'
 require 'log'
 
-puts '--- LOAD_PATH i controller.rb ---'
-puts $LOAD_PATH
-puts '------'
 
 
 

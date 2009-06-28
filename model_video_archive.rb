@@ -8,8 +8,6 @@
 
 require 'pathstring'
 require 'fileutils'
-require 'design_by_contract'
-#require 'debug'
 
 # A video_archive is a collection of videos (and some other files)
 #
@@ -25,8 +23,7 @@ require 'design_by_contract'
 # m4ved     - Videos that has been converted to m4v (suitable for iTunes)
 # failed    - Videos that we could not process.
 class Video_archive
-  include DesignByContract
-  include Send_mail
+  #include Send_mail
 
   # Constants     # TODO: Do this the right way.
   :ignore #= 1
