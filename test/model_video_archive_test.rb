@@ -87,14 +87,25 @@ class Video_archive_Test < Test::Unit::TestCase
           @rblog.info "Crated #{@testdir} (used for testing)."
         end
 
-        # Point the archive to testdir
+        # Point the archive to testdir, and create the inbox and the processed dirs
         begin
-          @video_archive.processed = @testdir
-          @video_archive.inbox = @testdir + 'inbox'
+          @video_archive.set_workflow_paths(@testdir) # paths
+          @video_archive.setup_archive_directories    # actual dir creation
+          #@video_archive.set_processed = @testdir
+          #@video_archive.inbox = @testdir + 'inbox'
         end
       end 
     end
 
+    should "All archive directories should exist" do
+      assert { @video_archive.inbox.exist? }
+      assert { @video_archive.processed.exist? }
+      assert { @video_archive.originals.exist? }
+      assert { @video_archive.unsupported.exist? }
+      assert { @video_archive.failed.exist? }
+      assert { @video_archive.m4ved.exist? }
+    end
+                 
     context "Paths - " do
       should "Setup archive directories" do
         assert_nothing_raised { @video_archive.setup_archive_directories }
@@ -118,8 +129,7 @@ class Video_archive_Test < Test::Unit::TestCase
 
     context "With example files - " do
       setup do
-        @examples = Pathstring(File.dirname(@testdir)) + 'examples'
-        @inbox = Pathstring(@testdir) + 'inbox'
+        @examples = Pathstring(File.dirname(@testdir)) + 'examples'        
       end
 
       context "A - " do
@@ -127,12 +137,30 @@ class Video_archive_Test < Test::Unit::TestCase
         setup do
           # Copy testfiles into place
           example = @examples + 'A'
-          FileUtils.copy_entry(example, @inbox, :remove_destination => true)
+          FileUtils.copy_entry(example, @video_archive.inbox, :remove_destination => true)
         end
 
         should "Process the file" do
           assert_nothing_raised { @video_archive.process_inbox }
-          assert { (@inbox + 'Dummy Sons of Anarchy s01e13 The Revelator.m4v').exist? } # Detta kommer inte att funka         
+        end
+
+        context "Processed - " do
+          setup do
+            @video_archive.process_inbox
+          end
+          
+          should "All archive directories should exist" do
+            assert { @video_archive.inbox.exist? }
+            assert { @video_archive.processed.exist? }
+            assert { @video_archive.originals.exist? }
+            assert { @video_archive.unsupported.exist? }
+            assert { @video_archive.failed.exist? }
+            assert { @video_archive.m4ved.exist? }
+          end
+          
+          should "Handle when Handbrake fails with a file." do
+            assert { (@video_archive.failed + 'Dummy.Sons.of.Anarchy.S01E13.The.Revelator.HDTV.XviD-FQM.avi').exist? } 
+          end
         end
       end
     end

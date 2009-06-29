@@ -26,20 +26,38 @@ require 'external_handbrake'
 class Video_archive
   #include Send_mail
 
-  attr_accessor :inbox, :processed
+  attr_reader :inbox, :processed, :originals, :unsupported, :failed, :m4ved
 
   def initialize(preferences)
     @rblog = Log.new(__FILE__)
     @rblog.debug "Initializing #{self.to_s}."
 
-    @inbox      = Pathstring.new(preferences.inbox) # In-box.
-    @processed  = Pathstring.new(preferences.processed)
-    #@current    = @processed + 'current'    # Normaly just contains max one file or directory - the one currently being worked on
-    @originals  = @processed + '_originals'  # TODO: Option to move to Trash + option to delete directly
-    @unsupported = @originals + '_unsupported'
-    @failed     = @originals + '_failed'     # Directory to put the files Handbrake could not do anything about in
-    @m4ved      = @processed + '_m4ved'      # Directory to take the files Handbrake creates.
-                        # TODO: Option to trash after iTunes has imported (in that case, this should be a temp directory inside inbox)
+    set_inbox(preferences.inbox)
+    set_processed_and_subfolders(preferences.processed)
+    # TODO: Option to trash after iTunes has imported (in that case, this should be a temp directory inside inbox)
+  end
+
+  # Setting paths for folders in workflow
+  begin
+    def set_inbox(inbox_path)
+      @inbox      = Pathstring.new(inbox_path)
+    end
+
+    def set_processed_and_subfolders(processed_path)
+      @processed  = Pathstring.new(processed_path)
+      #@current    = @processed + 'current'    # Normaly just contains max one file or directory - the one currently being worked on
+      @originals  = @processed + '_originals'  # TODO: Option to move to Trash + option to delete directly
+      @unsupported = @originals + '_unsupported'
+      @failed     = @originals + '_failed'     # Directory to put the files Handbrake could not do anything about in
+      @m4ved      = @processed + '_m4ved'      # Directory to take the files Handbrake creates.
+    end
+
+    def set_workflow_paths(path)   # Utilities method that points to a root workflow/'ItunesFeeder' dir, and inside that
+            # an inbox and a processed dir.
+      path = Pathstring(path)
+      set_inbox(path + 'inbox')
+      set_processed_and_subfolders(path + 'processed')
+    end
   end
 
   # Walks the archive, analyzing the files in it and processing them.
