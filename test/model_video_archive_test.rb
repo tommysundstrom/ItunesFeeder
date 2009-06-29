@@ -59,27 +59,36 @@ class Model_video_archive_Test < Test::Unit::TestCase
       @testdir = Pathstring('~/Programmering/Ruby/Projekt/ItunesFeeder_test').expand_path # WARNING This dir and
             # its content will be removed.
 
-      # Delete testdir (and everything in it)
+      # Cleanup and setup directories for testing
       begin
-        if @testdir.exist?
-          @rblog.info "Removing the test dir at #{@testdir}"
-          FileUtils.rmtree([@testdir], {:secure=>true}) # This will remove the dir including content. It's a bit
-                # sensitive about permissions etc, see http://www.ruby-doc.org/core/classes/FileUtils.html#M004366
-          raise "Failed to remove #{@testdir}." if @testdir.exist?
-        else
-          @rblog.debug "No test dir at #{@testdir} (so no need to remove it)."
+        # Delete testdir (and everything in it)
+        begin
+          if @testdir.exist?
+            @rblog.info "Removing the test dir at #{@testdir}"
+            FileUtils.rmtree([@testdir], {:secure=>true}) # This will remove the dir including content. It's a bit
+                  # sensitive about permissions etc, see http://www.ruby-doc.org/core/classes/FileUtils.html#M004366
+            raise "Failed to remove #{@testdir}." if @testdir.exist?
+          else
+            @rblog.debug "No test dir at #{@testdir} (so no need to remove it)."
+          end
         end
-      end
 
-      # Create a new testdir
-      begin
-        @rblog.debug "Creating a new testdir at #{@testdir.expand_path}"
-        # Assuming that there is no such dir now
-        raise "Failed to remove #{@testdir}." if @testdir.exist?
-        FileUtils.mkdir(@testdir)
-        #assert {@testdir.exist?}
-        @rblog.info "Crated #{@testdir} (used for testing)."
-      end
+        # Create a new testdir
+        begin
+          @rblog.debug "Creating a new testdir at #{@testdir.expand_path}"
+          # Assuming that there is no such dir now
+          raise "Failed to remove #{@testdir}." if @testdir.exist?
+          FileUtils.mkdir(@testdir)
+          #assert {@testdir.exist?}
+          @rblog.info "Crated #{@testdir} (used for testing)."
+        end
+
+        # Point the archive to testdir
+        begin
+          @video_archive.processed = @testdir
+          @video_archive.inbox = @testdir + 'inbox'
+        end
+      end 
     end
 
     should "Setup archive directories" do

@@ -25,6 +25,8 @@ require 'fileutils'
 class Video_archive
   #include Send_mail
 
+  attr_accessor :inbox, :processed
+
   # Constants     # TODO: Do this the right way.
   :ignore #= 1
   :not_video #= 2
