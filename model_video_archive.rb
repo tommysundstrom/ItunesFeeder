@@ -8,6 +8,7 @@
 
 require 'pathstring'
 require 'fileutils'
+require 'external_handbrake'
 
 # A video_archive is a collection of videos (and some other files)
 #

@@ -328,10 +328,6 @@
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
 										<string>__init__.rb</string>
-										<key>_historyCapacity</key>
-										<integer>40</integer>
-										<key>bookmark</key>
-										<string>6510BD370FF7C52200672B62</string>
 										<key>history</key>
 										<array>
 											<string>6510BCF90FF765E700672B62</string>
@@ -397,9 +393,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>6510BCE70FF6D24E00672B62</string>
+				<string>6510BD480FF93EE100672B62</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>6510BCE80FF6D24E00672B62</string>
+				<string>6510BD490FF93EE100672B62</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -533,12 +529,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>6510BD140FF7731900672B62</string>
-		<string>6510BD150FF7731900672B62</string>
-		<string>1CD10A99069EF8BA00B06720</string>
-		<string>6510B22E0FF6A4EA00672B62</string>
 		<string>/Users/Tommy/Programmering/Ruby/Projekt/ItunesFeeder/ItunesFeeder.xcodeproj</string>
-		<string>1C78EAAD065D492600B07095</string>
 	</array>
 	<key>WindowString</key>
 	<string>82 348 788 504 0 0 1440 878 </string>
