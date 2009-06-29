@@ -22,9 +22,13 @@ class Rb_main_Test < Test::Unit::TestCase
 
   context "rb_main.rb - " do
     setup do
-      require 'rb_main'
+      require 'rb_main'      
     end
-    should "Initialize the application"  do
+    should "Dummytest" do
+    end
+    
+    should_eventually "Initialize the application"  do  # seams that path = OSX::NSBundle.mainBundle.resourcePath.fileSystemRepresentation
+            # is not pointing to the application dir when I run a test (at least not when using Test::Unit to start it)
       OSX::NSLog "Initializing"
       assert_nothing_raised { rb_main_init }
     end

@@ -33,8 +33,8 @@ class Video_archive
   :analyze #= 3
 
   def initialize(preferences)
-    ###@classlog = Log.new(File.basename(__FILE__) + self.to_s)
-    ###@classlog.debug "Initializing #{self.to_s}."
+    @rblog = Log.new(__FILE__)
+    @rblog.debug "Initializing #{self.to_s}."
 
     @inbox      = Pathstring.new(preferences.inbox) # In-box.
     @processed  = Pathstring.new(preferences.processed)
@@ -54,18 +54,15 @@ class Video_archive
   #
   # TODO: Byt från 'each' till att alltid ta första objektet i foldern. Eftersom det alltid flyttas bort, blir resultatet
   # detsamma, men den blir mindre känslig för att saker läggs till/tas bort. Ev. Flytta saken under arbete till en särskild arbetsfolder (för att minska risken att någon stryker den medan man jobbar på den.
-  def empty_inbox
-    # Check that inbox and the other directories exists, and create if not
-      # Check that the volume exists (= is mounted)
-        ###@classlog.debug "Checking if inbox is mounted: #{@inbox.mounted?}"
-        if not @inbox.mounted? then     # TODO: BUG verkar inte varna även när WD saknas.
-          Log.warn "Volume containing '#{@inbox}' not found."
-          return
-        end
+  def empty_inbox # Check that inbox and the other directories exists, and create if not
 
-      #Log.debug "inbox: #{@inbox}"
-      #Log.debug "processed: #{@processed}"
-      setup_archive_directories
+    # Check that the volume exists (= is mounted)
+    unless @inbox.mounted?      # TODO: BUG verkar inte varna även när WD saknas.
+      Log.warn "Volume containing '#{@inbox}' not found."
+      return
+    end
+
+    setup_archive_directories
 
     process_inbox
 
@@ -78,17 +75,17 @@ class Video_archive
 
   # Process inbox
   def process_inbox
-    ###@classlog.debug "Checking the inbox..."
+    @rblog.debug "Checking the inbox..."
 
+    # First have a quick lookthrough and sort away the items that can not be video files.
     interesting_children = @inbox.children.reject {|t| eyeball(t) == :ignore || eyeball(t) == :not_video }
 
-    ###@classlog.debug "Number of items in inbox: #{interesting_children.length}"
-    ###@classlog.info "--- Emptying the inbox (#{interesting_children.length} items) ---" unless interesting_children.length == 0
+    @rblog.debug "Number of items in inbox: #{interesting_children.length}"
+    @rblog.info "--- Emptying the inbox (#{interesting_children.length} items) ---" unless interesting_children.length == 0
 
     interesting_children.each do |inp|
-      # TODO: Handle changes in the folder while this loop is running (since it involves Handbreaking
-      # files, it can run for hours).
-      ###@classlog.debug "Analyzing #{inp}"
+      # TODO: Handle changes in the folder while this loop is running (since it involves Handbreaking files, it can run for hours).
+      @rblog.debug "Analyzing #{inp}"
 
       if inp.directory?
         # Handle videos that are in the form of a directory
@@ -101,7 +98,7 @@ class Video_archive
 
         # Check so there is not a (possible) hierarchy of directories
 
-        # Identify adn handle rar-archives
+        # Identify and handle rar-archives
 
 
         #
@@ -127,7 +124,7 @@ class Video_archive
           next
 
       else
-        raise "Okänd typ: #{inp.to_s}"
+        raise "Unknown type: #{inp.to_s}"
         # TODO: Handle links and aliases
       end
 
@@ -136,70 +133,6 @@ class Video_archive
     end
     ###@classlog.info "... Inbox is emptied ..."
   end
-
-
-=begin
-
-    Log.debug "inbox: #{@inbox}"
-    Log.debug "@inbox.children: #{@inbox.children}"
-
-    @inbox.children.each do |inp|
-      Log.debug "Analyzing #{inp}"
-
-      # Removing uninteresting files and directories
-        prel_result = eyeball(inp)
-        if prel_result == :ignore then
-          next
-        end
-        if prel_result == :not_video then
-          just_move_handler(inp)
-          next
-        end
-
-      if inp.directory?
-        # Handle videos that are in the form of a directory
-
-        # Removing uninteresting files and directories
-          candidates = inp.children # OSV OSV
-
-        # Check so that the folder does not contain multiple objects that could be videos.
-          video_extensions = [".m4v", ".avi", "" ]
-
-        # Check so there is not a (possible) hierarchy of directories
-
-        # Identify adn handle rar-archives
-
-
-        #
-        failed_handler(inp, "Can't handle folders yet.")
-        next
-
-        # Kom ihåg:
-        # * Foldernamnet oftast intressantare än filnamnet
-        # * Ev. intressant behålla bildmaterial, subs etc.
-
-      elsif inp.file?
-        # Make it into a Video object
-          video = Video.new(inp)
-
-        # Find a handler
-          if video.extension == ".m4v" then
-            passtrough_with_cleaned_name_handler(video) # Already in the correct format.
-            next
-          end
-
-        # If no special case was found, use the general_handler
-          general_handler(video)
-          next
-
-      else
-        raise "Okänd typ: #{inp.to_s}"
-        # TODO: Handle links and aliases
-      end
-    end
-    # TODO: For all move - hadle duplicate files (check FileUtils, maybe it has a solution already)
-    # TODO: Enclose all in try, and move those that triggers an error to a special folder
-=end
 
 
 

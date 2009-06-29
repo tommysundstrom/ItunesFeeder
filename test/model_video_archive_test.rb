@@ -93,6 +93,9 @@ class Model_video_archive_Test < Test::Unit::TestCase
 
     should "Setup archive directories" do
       assert_nothing_raised { @video_archive.setup_archive_directories }
+      assert { @video_archive.inbox.exist? }
+      assert { @video_archive.inbox == @testdir + 'inbox' }
+      assert { @video_archive.processed.exist? }
     end
 
     should "Recognize when a volume is non-existant" do
