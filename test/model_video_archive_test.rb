@@ -132,12 +132,19 @@ class Video_archive_Test < Test::Unit::TestCase
         @examples = Pathstring(File.dirname(@testdir)) + 'examples'        
       end
 
-      context "A - " do
-        # Just one, empty, avi-file.
+      context "A - " do        
         setup do
           # Copy testfiles into place
-          example = @examples + 'A'
+          @example_folder = 'A'
+          example = @examples + @example_folder
           FileUtils.copy_entry(example, @video_archive.inbox, :remove_destination => true)
+        end
+
+        teardown do
+          result_archive = @examples + (@example_folder.to_s + ' - result')
+          FileUtils.rmtree([result_archive], {:secure=>true})
+          result_archive.mkdir
+          FileUtils.copy_entry(@video_archive.inbox.dirname, result_archive, :remove_destination => true)
         end
 
         should "Process the file" do

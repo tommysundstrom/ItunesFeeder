@@ -195,7 +195,7 @@ class Video_archive
       m4v_video = Handbrake::feed_me(video, @m4ved)
       if m4v_video then
         video.move_me(@originals) # Move the processed file.
-        m4v_video.add_me_to_iTunes
+        # Todo TILLFALLIGT BORTKOPPLAD   m4v_video.add_me_to_iTunes
         ### send_email('no-reply@heltenkelt.se', 'iTunes Feeder', 'tommy@heltenkelt.se', 'Tommy Sundström', "#{m4v_video.name} added to iTunes", '')
         # Skriv in konverterad fil i särskild logg. Skicka ett mail eller publicera RSS.
         # TODO: 2-3 min paus if conversion took more than 10 min.
@@ -209,7 +209,7 @@ class Video_archive
       @rblog.info "passtrough_with_cleaned_name_handler is handling #{video.basename}"
       video.move_and_clean_me(@m4ved) # Since the file is already in the right format, it is just moved
             # to the output directory. No copy is made to @processed. Name is cleaned up.
-      video.add_me_to_iTunes
+      # Todo TILLFALLIGT BORTKOPPLAD   video.add_me_to_iTunes
     end
 
     # Stuff we can't handle is moved to failed
