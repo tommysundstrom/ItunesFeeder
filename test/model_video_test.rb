@@ -39,6 +39,7 @@ class Model_video_Test < Test::Unit::TestCase
                 'True.Blood.S02E03.HDTV.DVDrip.[AC3_2009].ENG-DUQA.avi' => 'True Blood s02e03',
                 'Trust.Me.S01E03.HDTV.XviD-0TV.avi' => 'Trust Me s01e03',
                 'Trust.Me.US.S01E04.HDTV.XviD-aAF.avi' => 'Trust Me US s01e04',
+                'Dummy.Sons.of.Anarchy.S01E13.The.Revelator.HDTV.XviD-FQM.avi' => 'Dummy Sons of Anarchy s01e13 The Revelator'
                 }
         eventually = {      # Do not (yet) have the right code to clean these.
                 'The.Cleaner.1x01.2008.SPANISH.HDTV.XviD.[www.BajandoSeries.com].avi' => 'The Cleaner s01e01',

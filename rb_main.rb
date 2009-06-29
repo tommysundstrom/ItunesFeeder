@@ -7,10 +7,10 @@
 #
 
 require 'osx/cocoa'
-OSX::NSLog "Running rb_main.rb"
+# OSX::NSLog "Running rb_main.rb"
 
 def rb_main_init
-  OSX::NSLog "rb_main_init"
+  OSX::NSLog "rb_main_init" # TEST
   path = OSX::NSBundle.mainBundle.resourcePath.fileSystemRepresentation
   rbfiles = Dir.entries(path).select {|x| /\.rb\z/ =~ x}
   rbfiles -= [ File.basename(__FILE__) ]
@@ -22,7 +22,7 @@ def rb_main_init
 end
 
 def rb_main_tommys_extra_init
-  OSX::NSLog "rb_main_tommys_extra_init"
+  OSX::NSLog "rb_main_tommys_extra_init" # TEST
   $LOAD_PATH << File.dirname(File.expand_path(__FILE__))  
 end
 

@@ -20,14 +20,14 @@ require 'log4r'
 
        # Then, if it is empty, delete it
        if item.empty?
-         OSX::NSLog "Removing directory: #{file.basename}"
+         # OSX::NSLog "Removing directory: #{file.basename}"
          item.unlink
        end
      else # Not a directory, so a normal file
        unless Pathstring(item).basename.scan(/rolling/)[0] # Note: This depends on the convention to include 'rolling' in the name of persistent files. TODO: Remove older rolling logs.
          # If it is not a persistent log
          #   remove it
-         OSX::NSLog "Removing log: #{item.basename}"
+         # OSX::NSLog "Removing log: #{item.basename}"
          item.unlink
        end
      end
@@ -141,7 +141,7 @@ class Log #< OSX::NSObject
       d = path_to_log.dirname
       Pathstring(d).mkpath
 
-      OSX::NSLog "f: #{path_to_log}"
+      # OSX::NSLog "f: #{path_to_log}"
 
       # Creating outputter
       outputter = FileOutputter.new("output_all#{id}", :filename => (path_to_log).to_s, :formatter => @@formatter)

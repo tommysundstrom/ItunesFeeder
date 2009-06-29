@@ -53,10 +53,10 @@ class Model_video_archive_Test < Test::Unit::TestCase
   end
 
 
-  context "Creating directories for the archive" do
+  context "Creating directories for the archive - " do
     setup do
       @video_archive = Video_archive.new(Preferences.new)
-      @testdir = Pathstring('~/Programmering/Ruby/Projekt/ItunesFeeder_test').expand_path # WARNING This dir and
+      @testdir = Pathstring('~/Programmering/Ruby/Projekt/ItunesFeeder_test/workflow').expand_path # WARNING This dir and
             # its content will be removed.
 
       # Cleanup and setup directories for testing
@@ -79,7 +79,7 @@ class Model_video_archive_Test < Test::Unit::TestCase
           # Assuming that there is no such dir now
           raise "Failed to remove #{@testdir}." if @testdir.exist?
           FileUtils.mkdir(@testdir)
-          #assert {@testdir.exist?}
+          assert {@testdir.exist?}
           @rblog.info "Crated #{@testdir} (used for testing)."
         end
 
@@ -91,32 +91,46 @@ class Model_video_archive_Test < Test::Unit::TestCase
       end 
     end
 
-    should "Setup archive directories" do
-      assert_nothing_raised { @video_archive.setup_archive_directories }
-      assert { @video_archive.inbox.exist? }
-      assert { @video_archive.inbox == @testdir + 'inbox' }
-      assert { @video_archive.processed.exist? }
+    context "Paths - " do
+      should "Setup archive directories" do
+        assert_nothing_raised { @video_archive.setup_archive_directories }
+        assert { @video_archive.inbox.exist? }
+        assert { @video_archive.inbox == @testdir + 'inbox' }
+        assert { @video_archive.processed.exist? }
+      end
+
+      should "Recognize when a volume is non-existant" do
+        deny { Pathstring.new('/Volumes/Noneexistant/dir/dir/inbox').mounted? }
+      end
+
+      should "Recognize when a volume exists" do
+        assert { Pathstring.new(File.expand_path('~/Music')).mounted? }
+      end
+
+      #should "Log if the path to the inbox is incorrect (or maybe not mounted for the moment)" do
+      #  assert { @video_archive.volume_exists?('/System/Volumes/Noneexistant/dir/dir/inbox' == false) }
+      #end
     end
 
-    should "Recognize when a volume is non-existant" do
-      deny { Pathstring.new('/Volumes/Noneexistant/dir/dir/inbox').mounted? }
+    context "With example files - " do
+      setup do
+        @examples = Pathstring(File.dirname(@testdir)) + 'examples'
+        @inbox = Pathstring(@testdir) + 'inbox'
+      end
+
+      context "A - " do
+        # Just one, empty, avi-file.
+        setup do
+          # Copy testfiles into place
+          example = @examples + 'A'
+          FileUtils.copy_entry(example, @inbox, :remove_destination => true)
+        end
+
+        should "Process the file" do
+          assert_nothing_raised { @video_archive.process_inbox }
+          assert { (@inbox + 'Dummy Sons of Anarchy s01e13 The Revelator.m4v').exist? } # Detta kommer inte att funka         
+        end
+      end
     end
-
-    should "Recognize when a volume exists" do
-      assert { Pathstring.new(File.expand_path('~/Music')).mounted? }
-    end
-
-    #should "Log if the path to the inbox is incorrect (or maybe not mounted for the moment)" do
-    #  assert { @video_archive.volume_exists?('/System/Volumes/Noneexistant/dir/dir/inbox' == false) }
-    #end
-
-    should "Validate or create the needed folders" do
-    end
-      
-
   end
-
-
-
-
 end

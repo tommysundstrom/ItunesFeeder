@@ -27,11 +27,6 @@ class Video_archive
 
   attr_accessor :inbox, :processed
 
-  # Constants     # TODO: Do this the right way.
-  :ignore #= 1
-  :not_video #= 2
-  :analyze #= 3
-
   def initialize(preferences)
     @rblog = Log.new(__FILE__)
     @rblog.debug "Initializing #{self.to_s}."
@@ -44,7 +39,6 @@ class Video_archive
     @failed     = @originals + '_failed'     # Directory to put the files Handbrake could not do anything about in
     @m4ved      = @processed + '_m4ved'      # Directory to take the files Handbrake creates.
                         # TODO: Option to trash after iTunes has imported (in that case, this should be a temp directory inside inbox)
-
   end
 
   # Walks the archive, analyzing the files in it and processing them.
@@ -71,7 +65,7 @@ class Video_archive
 
 
 
-      # Preparatons
+  # Preparatons
 
   # Process inbox
   def process_inbox
@@ -134,8 +128,6 @@ class Video_archive
     ###@classlog.info "... Inbox is emptied ..."
   end
 
-
-
   # Gives a preliminary view of what to do with a file or dir, so that the uninteresting ones
   # can be filtered out.
   #
@@ -173,19 +165,19 @@ class Video_archive
   end
 
   # Handlers
-
+  begin
     # Handles all the simple chases (those that are in a format Handbrake can handle)
     # (Undrar om jag i detta (och liknande) borde kolla att filen inte växer
     # - dvs håller på att kopieras. Tycker fillåset borde ta hand om den saken,
     # men vem vet.
     def general_handler(video)
-      ###@classlog.info "general_handler is handling #{video.basename}"
+      @rblog.info "general_handler is handling #{video.basename}"
       # TODO: This (and some other) should take some seconds to check that the file is not still growing.
       m4v_video = Handbrake::feed_me(video, @m4ved)
       if m4v_video then
         video.move_me(@originals) # Move the processed file.
         m4v_video.add_me_to_iTunes
-        ###send_email('no-reply@heltenkelt.se', 'iTunes Feeder', 'tommy@heltenkelt.se', 'Tommy Sundström', "#{m4v_video.name} added to iTunes", '')
+        ### send_email('no-reply@heltenkelt.se', 'iTunes Feeder', 'tommy@heltenkelt.se', 'Tommy Sundström', "#{m4v_video.name} added to iTunes", '')
         # Skriv in konverterad fil i särskild logg. Skicka ett mail eller publicera RSS.
         # TODO: 2-3 min paus if conversion took more than 10 min.
       else
@@ -195,7 +187,7 @@ class Video_archive
     end
 
     def passtrough_with_cleaned_name_handler(video)
-      ###@classlog.info "passtrough_with_cleaned_name_handler is handling #{video.basename}"
+      @rblog.info "passtrough_with_cleaned_name_handler is handling #{video.basename}"
       video.move_and_clean_me(@m4ved) # Since the file is already in the right format, it is just moved
             # to the output directory. No copy is made to @processed. Name is cleaned up.
       video.add_me_to_iTunes
@@ -203,38 +195,39 @@ class Video_archive
 
     # Stuff we can't handle is moved to failed
     def failed_handler(inp, reason)
-      ###@classlog.info "just_move_handler is handling #{inp.basename}"
-      ###@classlog.info "Failed to do anything with #{inp.basename}, except moving it to #{@failed}"
-      ###@classlog.info "This is why: #{reason}"
+      @rblog.info "Failed to do anything with #{inp.basename}, except moving it to #{@failed}"
+      @rblog.info "This is why: #{reason}"
       FileUtils.move(inp, @unsupported + inp.basename) # TODO: Handle overwrites
     end
+  end
 
 
   # Checks if all needed directories exists, and creates them if not
-  def setup_archive_directories
-    ###@classlog.info "Verifying or creating inbox at '#{@inbox}'"
-    @inbox.mkpath
-    ###@classlog.debug "Inbox checked"
+  begin
+    def setup_archive_directories
+      @rblog.info "Verifying or creating inbox at '#{@inbox}'"
+      @inbox.mkpath
+      @rblog.debug "Inbox in place"
 
-    ###@classlog.info "Verifying or creating processed at '#{@processed}'"
-    @processed.mkpath
-    #@current.mkpath
-    @originals.mkpath
-    @m4ved.mkpath
-    @unsupported.mkpath
-    @failed.mkpath
+      @rblog.info "Verifying or creating processed at '#{@processed}'"
+      @processed.mkpath
+      #@current.mkpath
+      @originals.mkpath
+      @m4ved.mkpath
+      @unsupported.mkpath
+      @failed.mkpath
 
-    ###@classlog.debug "Exits setup_archive_directories"
+      @rblog.debug "Exits setup_archive_directories"
+    end
+
+    def cleanup_archive_directories
+      @rblog.info "Removing empty processed directories"
+      @originals.rmdir     if @originals.delete_dsstore!.children.length == 0
+      @m4ved.rmdir         if @m4ved.delete_dsstore!.children.length == 0
+      @unsupported.rmdir   if @unsupported.delete_dsstore!.children.length == 0
+      @failed.rmdir        if @failed.delete_dsstore!.children.length == 0
+    end
   end
-
-  def cleanup_archive_directories
-    ###@classlog.info "Removing empty processed directories"
-    @originals.rmdir     if @originals.delete_dsstore!.children.length == 0
-    @m4ved.rmdir         if @m4ved.delete_dsstore!.children.length == 0
-    @unsupported.rmdir   if @unsupported.delete_dsstore!.children.length == 0
-    @failed.rmdir        if @failed.delete_dsstore!.children.length == 0
-  end
-
 end
 
 
