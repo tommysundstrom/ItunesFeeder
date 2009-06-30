@@ -24,13 +24,17 @@ require 'external_handbrake'
 # m4ved     - Videos that has been converted to m4v (suitable for iTunes)
 # failed    - Videos that we could not process.
 class Video_archive
-  #include Send_mail
+  # TODO include Send_mail
+  CLASSLOG = Log.new("Class: #{self.name}") # Creates a log named 'Class:' + class name + .log
+  CLASSLOG.debug "Loaded class '#{self.name}' from '#{__FILE__}'"
+  CLASSLOG.debug "Creating '#{self.to_s}'." # Use inside def initialize, to get object id
 
   attr_reader :inbox, :processed, :originals, :unsupported, :failed, :m4ved
 
   def initialize(preferences)
     @rblog = Log.new(__FILE__)
     @rblog.debug "Initializing #{self.to_s}."
+    CLASSLOG.debug "Creating '#{self.to_s}'." # Use inside def initialize, to get object id
 
     set_inbox(preferences.inbox)
     set_processed_and_subfolders(preferences.processed)

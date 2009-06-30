@@ -45,7 +45,7 @@ class Controller < OSX::NSObject
     menu = NSMenu.alloc.init
     status_item.setMenu(menu)
 
-    menu_item = menu.addItemWithTitle_action_keyEquivalent( "Empty inbox", "empty_inbox_once:", '')
+    menu_item = menu.addItemWithTitle_action_keyEquivalent( "Empty inbox once", "empty_inbox_once:", '')
     menu_item.setTarget(self) # TODO: Will with all probably be moved to another class & module
 
     menu_item = menu.addItemWithTitle_action_keyEquivalent( "Test", "test:", '')  # TEST
