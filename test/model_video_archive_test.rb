@@ -1,8 +1,3 @@
-#require "test/unit"
-#require 'rubygems'
-#require 'shoulda'
-#require 'assert2'
-
 require 'test_setup'
 
 require 'fileutils'
@@ -104,6 +99,14 @@ class Video_archive_Test < Test::Unit::TestCase
       assert { @video_archive.unsupported.exist? }
       assert { @video_archive.failed.exist? }
       assert { @video_archive.m4ved.exist? }
+    end
+
+    should "Clean up empty directories" do
+      assert_nothing_raised { @video_archive.cleanup_archive_directories }
+      deny { @video_archive.originals.exist? }
+      deny { @video_archive.unsupported.exist? }
+      deny { @video_archive.failed.exist? }
+      deny { @video_archive.m4ved.exist? }
     end
                  
     context "Paths - " do

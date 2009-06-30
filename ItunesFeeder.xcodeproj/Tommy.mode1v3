@@ -329,12 +329,12 @@
 										<key>_historyCapacity</key>
 										<integer>40</integer>
 										<key>bookmark</key>
-										<string>6510C03D0FFA14C400672B62</string>
+										<string>6549A1E30FFA3846007BA717</string>
 										<key>history</key>
 										<array>
 											<string>6510BCF90FF765E700672B62</string>
 											<string>6510BCFA0FF765E700672B62</string>
-											<string>6510C03C0FFA14C400672B62</string>
+											<string>6510C0480FFA380F00672B62</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -396,9 +396,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>6510BD480FF93EE100672B62</string>
+				<string>6549A1E40FFA3846007BA717</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>6510BD490FF93EE100672B62</string>
+				<string>6549A1E50FFA3846007BA717</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -532,13 +532,10 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>6510BD750FF9E9C700672B62</string>
-		<string>6510BD760FF9E9C700672B62</string>
-		<string>1C78EAAD065D492600B07095</string>
 		<string>6510B22E0FF6A4EA00672B62</string>
-		<string>1C0AD2AF069F1E9B00FABCE6</string>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>/Users/Tommy/Programmering/Ruby/Projekt/ItunesFeeder/ItunesFeeder.xcodeproj</string>
+		<string>1C78EAAD065D492600B07095</string>
 	</array>
 	<key>WindowString</key>
 	<string>110 354 788 504 0 0 1440 878 </string>
@@ -618,7 +615,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>6510B22E0FF6A4EA00672B62</string>
-				<string>6510BD6D0FF974D500672B62</string>
+				<string>6549A1E60FFA3846007BA717</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -660,8 +657,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {316, 194}}</string>
-											<string>{{316, 0}, {378, 194}}</string>
+											<string>{{0, 0}, {316, 198}}</string>
+											<string>{{316, 0}, {378, 198}}</string>
 										</array>
 									</dict>
 									<key>VerticalSplitView</key>
@@ -676,8 +673,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {694, 194}}</string>
-											<string>{{0, 194}, {694, 187}}</string>
+											<string>{{0, 0}, {694, 198}}</string>
+											<string>{{0, 198}, {694, 183}}</string>
 										</array>
 									</dict>
 								</dict>
@@ -710,7 +707,7 @@
 										<real>148</real>
 									</array>
 									<key>Frame</key>
-									<string>{{316, 0}, {378, 194}}</string>
+									<string>{{316, 0}, {378, 198}}</string>
 									<key>RubberWindowFrame</key>
 									<string>103 407 694 422 0 0 1440 878 </string>
 								</dict>
@@ -738,13 +735,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1CD10A99069EF8BA00B06720</string>
-				<string>6510BD4E0FF973FE00672B62</string>
+				<string>6549A1E70FFA3846007BA717</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>6510BD4F0FF973FE00672B62</string>
-				<string>6510BD500FF973FE00672B62</string>
-				<string>6510BD510FF973FE00672B62</string>
-				<string>6510BD520FF973FE00672B62</string>
-				<string>6510BD530FF973FE00672B62</string>
+				<string>6549A1E80FFA3846007BA717</string>
+				<string>6549A1E90FFA3846007BA717</string>
+				<string>6549A1EA0FFA3846007BA717</string>
+				<string>6549A1EB0FFA3846007BA717</string>
+				<string>6549A1EC0FFA3846007BA717</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>
@@ -908,7 +905,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C78EAAD065D492600B07095</string>
-				<string>6510BD6E0FF974D500672B62</string>
+				<string>6549A1ED0FFA3846007BA717</string>
 				<string>1C78EAAC065D492600B07095</string>
 			</array>
 			<key>ToolbarConfiguration</key>
@@ -918,7 +915,7 @@
 			<key>WindowToolGUID</key>
 			<string>1C78EAAD065D492600B07095</string>
 			<key>WindowToolIsVisible</key>
-			<false/>
+			<true/>
 		</dict>
 		<dict>
 			<key>Identifier</key>

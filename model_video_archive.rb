@@ -246,10 +246,13 @@ class Video_archive
 
     def cleanup_archive_directories
       CLASSLOG.info "Removing empty processed directories"
-      @originals.rmdir     if @originals.delete_dsstore!.children.length == 0
-      @m4ved.rmdir         if @m4ved.delete_dsstore!.children.length == 0
       @unsupported.rmdir   if @unsupported.delete_dsstore!.children.length == 0
       @failed.rmdir        if @failed.delete_dsstore!.children.length == 0
+      @originals.rmdir     if @originals.delete_dsstore!.children.length == 0 # Note: needs to be removed *after*
+            # the two dirs above (that resides *inside* originals).
+      @m4ved.rmdir         if @m4ved.delete_dsstore!.children.length == 0
+      @processed.rmdir     if @processed.delete_dsstore!.children.length == 0 # Note: must be removed last
+
     end
   end
 end

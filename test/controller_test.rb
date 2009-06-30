@@ -28,10 +28,15 @@ class ControllerTest < Test::Unit::TestCase
     context "Controller object - " do
       setup do
         @c = Controller.new
+        @c.setup_preferences
       end
 
       should "Call awakeFromNib." do
         assert_nothing_raised { @c.awakeFromNib }        
+      end
+
+      should "Empty inbox once" do
+        @c.empty_inbox_once('dummyvalue')
       end
     end
   end

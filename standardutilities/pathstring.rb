@@ -183,7 +183,7 @@ class Pathstring < String
   # Mac-centric
   def delete_dsstore!
     if (self + '.DS_Store').exist? then
-      (self + '.DS_Store').delete
+      (self + '.DS_Store').unlink
     end
     return self
   end
