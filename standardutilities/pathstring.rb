@@ -2,13 +2,15 @@
 #  Pathstring.rb
 #  ItunesFeeder
 #
-#  Created by Tommy Sundström on 25/2-09.
+#  Created by Tommy Sundstr√∂m on 25/2-09.
 #  Copyright (c) 2009 Helt Enkelt ab. All rights reserved.
 #
 
 require 'pathname'
 require 'pp'
 require 'osx/cocoa'
+# require 'log'   WARNING since pathstring uses log, log can not be included here.
+
 
 
 # Pathstring is a replacement for Pathname, that is a subclass to string. This way we get rid of the need
@@ -20,7 +22,12 @@ require 'osx/cocoa'
 # * Some extra utility classes.
 #
 class Pathstring < String
+  #CLASSLOG = Log.new("Class: #{self.name}") # Creates a log named 'Class:' + class name + .log
+  #CLASSLOG.debug "Loaded class '#{self.name}' from '#{__FILE__}'"
+
   def initialize(path)
+    #CLASSLOG.debug "Creating '#{self.to_s} with path '#{path}'" # Use inside def initialize, to get object id
+
     # I'm not 100% about these two, so for the moment they'll have to go
     # path = File.expand_path(path) if path[0].to_s == '~' # Auto-expand ~-paths
     # path = File.expand_path(path) if path[0].to_s == '.' # Auto-expand paths anchored in present working directory
@@ -31,8 +38,8 @@ class Pathstring < String
   
   def method_missing(symbol, *args)
     result = @pathname.__send__(symbol, *args)      # BUG BUG BUG   Ibland ger pathname andra sorters svar, t.ex. sant/falsk eller en array
-          # När det inte är en Pathname objekt jag får tillbaka, måste jag släppa vidare svaret som det är (typ)
-          # Fast ev kolla på innehållet i arrayen (t.ex. när det är children, och Pathstringa dem.
+          # N√§r det inte √§r en Pathname objekt jag f√•r tillbaka, m√•ste jag sl√§ppa vidare svaret som det √§r (typ)
+          # Fast ev kolla p√• inneh√•llet i arrayen (t.ex. n√§r det √§r children, och Pathstringa dem.
     if result.class == Pathname then
       return Pathstring.new(result)
     elsif result.class == Array  then
@@ -71,10 +78,10 @@ class Pathstring < String
     
   # Like Dir.mkdir, but without the error if a folder is already in place
   # The most common error is SystemCallError = The direcotry cannot be created
-  def ANVANDS_EJensure_directory   # ANVÄND MKPATH ISTÄLLET!!!!
-    #$log.debug "Enters ensure_directory. self: #{self}"
+  def ANVANDS_EJensure_directory   # ANV√ÑND MKPATH IST√ÑLLET!!!!
+    #CLASSLOG.debug "Enters ensure_directory. self: #{self}"
     if self.exist? then 
-      #$log.debug "#{self} alredy existed"
+      #CLASSLOG.debug "#{self} alredy existed"
       return  # Directory already in place, no need to do anything.  
     end 
     self.mkdir  
@@ -112,12 +119,35 @@ class Pathstring < String
   ##def mv(destination)
   ##end
   
-  # If self is a directory, adds item.
-  # If something with the same name is already present, adds a number to item and tries again, until success or to many tries.
-  def enumbered_add_to_directory(item)
-    $log.info "Renamed #{Pathstring.new(item).basename} to xxxx"
+  # Returns a path to 'name' in self. self needs to be a directory.
+  # If something with the same name is already present, adds a number to the name and tries again, until success or to many tries.
+  def enumbered_add(name)
+    # CLASSLOG.debug "Adding '#{name}' to '#{self}'."
+    if not self.directory? then raise "Can only add #{name} to a directory path." end
+
+    new_path = self + name
+    # Check if there already is a fsitem with this path
+    if new_path.exist?
+      # Needs to change name, until I find something that is not already used
+      for n in 1..9999 do
+        new_path = self + name + " %04d" % n   # adds for example 0012 to the name
+        if not new_path.exist?
+          return Pathstring(new_path) # Returns a free name
+        end
+      end
+      CLASSLOG.warning "Unable to find a free name for '#{name}'."
+      return false
+    end
+    return Pathstring(new_path)
   end 
-  
+
+  # Adds an extension
+  def add_extension(ext)
+    return Pathstring(self.to_s + '.' + ext)  
+  end
+
+
+
   # Array of child-files and folders that to not begin their name with a dot
   def undotted_children
     self.children.reject {|t| t[0].to_s == '.' }
@@ -186,7 +216,7 @@ class Pathstring < String
     raise 'Unable to find an application name.'
   end
   
-  # Array of the basenames of the children TROR DETTA REDAN ÄR TÄCKT AV TYP Dir*
+  # Array of the basenames of the children TROR DETTA REDAN √ÑR T√ÑCKT AV TYP Dir*
   def children_basename
   
   end

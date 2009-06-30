@@ -6,11 +6,12 @@ require 'controller_preferences'
 require 'log'
 
 class Model_video_Test < Test::Unit::TestCase
+  CLASSLOG = Log.new("Class: #{self.name}") # Creates a log named 'Class:' + class name + .log
+  CLASSLOG.debug "Loaded class '#{self.name}' from '#{__FILE__}'"
 
   def setup
     require 'model_video'
-    @rblog = Log.new(__FILE__)
-    @rblog.debug "Running #{self.to_s}."
+    CLASSLOG.debug "Running #{self.to_s}."
   end
 
   # Called after every test method runs. Can be used to tear

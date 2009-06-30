@@ -19,21 +19,26 @@ require 'open3' # http://tech.natemurray.com/2007/03/ruby-shell-commands.html
 class Handbrake
     CLASSLOG = Log.new("Class: #{self.name}") # Creates a log named 'Class:' + class name + .log
     CLASSLOG.debug "Loaded class '#{self.name}' from '#{__FILE__}'"
-    CLASSLOG.debug "Creating '#{self.to_s}'." # Use inside def initialize, to get object id
+    CLASSLOG.debug "Creating '#{self.to_s}." # Use inside def initialize, to get object id
 
-    def self.feed_me(video, converted, type = :normal) # TODO: Settings for :animated
-    CLASSLOG.debug "Feeding '#{video.basename}' to Handbrake."
+    def self.feed_me(video, processed, type = :normal) # TODO: Settings for :animated  
 
     # Get names
-      #inp_name = File::basename(inp.to_s, File::extname(inp.to_s))
-      out_path = Pathstring.new(converted) + (video.prefered_name + ".m4v")
+      out_path = Pathstring(processed).enumbered_add(video.prefered_name)
+      #out_path = Pathstring.new(converted) + (video.prefered_name + ".m4v")
+      if out_path === false
+        CLASSLOG.error "Unable to find a free name for '#{video.prefered_name}' in '#{processed}'."
+        return false  # I.e the video file will be moved away and we can continue with next.
+      end
+      out_path.add_extension('m4v')
+
 
     # Check that the file does not already exist
-      if out_path.exist? then
-        CLASSLOG.warn "#{out_path} exists already, so cannot process #{video.basename}."
+      #if out_path.exist? then
+       # CLASSLOG.warn "#{out_path} exists already, so cannot process #{video.basename}."
         # raise # TODO: fix this and handler for it
-        return
-      end
+        #return
+      #end
 
     # Feed it to Handbrake
       CLASSLOG.info "Feeding '#{video.file.basename}' to Handbrake"
@@ -56,6 +61,7 @@ class Handbrake
         if lastline == 'HandBrake has exited.' then
           # Result is reported on the line before this one
           result = lines.pop.strip
+          CLASSLOG.debug "HandBrake result: #{result}"
           break
         end
       end
@@ -64,17 +70,18 @@ class Handbrake
         when 'Rip done!'
           # Make a video object of the converted file, to feed into iTunes
           CLASSLOG.info "Rip done!"
-            m4v_video = Video.new(out_path)
+          m4v_video = Video.new(out_path)
           # ...and feed it to iTunes
           return m4v_video
         when 'No title found.'
           # Handbrake did not manage to convert the file.
-          CLASSLOG.warn "Failed to convert #{video.file.basename}"
+          CLASSLOG.warn "No title found - failed to convert #{video.file.basename}"
           return false
         when ''
           CLASSLOG.warn "No result. Never found 'HandBrake has exited'"
           return false
         else
+          CLASSLOG.error "HandBrake returned unknown result: #{result}"
           raise "HandBrake returned unknown result: #{result}"
       end
 

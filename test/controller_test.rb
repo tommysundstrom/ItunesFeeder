@@ -1,7 +1,4 @@
-require "test/unit"
-require 'rubygems'
-require 'shoulda'
-require 'assert2'
+require 'test_setup'
 
 class ControllerTest < Test::Unit::TestCase
 

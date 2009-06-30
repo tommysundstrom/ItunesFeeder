@@ -9,6 +9,7 @@
 require 'pathstring'
 require 'fileutils'
 require 'external_handbrake'
+require 'model_video'
 
 # A video_archive is a collection of videos (and some other files)
 #
@@ -33,7 +34,7 @@ class Video_archive
 
   def initialize(preferences)
     @rblog = Log.new(__FILE__)
-    @rblog.debug "Initializing #{self.to_s}."
+    CLASSLOG.debug "Initializing #{self.to_s}."
     CLASSLOG.debug "Creating '#{self.to_s}'." # Use inside def initialize, to get object id
 
     set_inbox(preferences.inbox)
@@ -92,17 +93,17 @@ class Video_archive
 
   # Process inbox
   def process_inbox
-    @rblog.debug "Checking the inbox..."
+    CLASSLOG.debug "Checking the inbox..."
 
     # First have a quick lookthrough and sort away the items that can not be video files.
     interesting_children = @inbox.children.reject {|t| eyeball(t) == :ignore || eyeball(t) == :not_video }
 
-    @rblog.debug "Number of items in inbox: #{interesting_children.length}"
-    @rblog.info "--- Emptying the inbox (#{interesting_children.length} items) ---" unless interesting_children.length == 0
+    CLASSLOG.debug "Number of items in inbox: #{interesting_children.length}"
+    CLASSLOG.info "--- Emptying the inbox (#{interesting_children.length} items) ---" unless interesting_children.length == 0
 
     interesting_children.each do |inp|
       # TODO: Handle changes in the folder while this loop is running (since it involves Handbreaking files, it can run for hours).
-      @rblog.debug "Analyzing #{inp}"
+      CLASSLOG.debug "Analyzing #{inp}"
 
       if inp.directory?
         # Handle videos that are in the form of a directory
@@ -194,7 +195,7 @@ class Video_archive
     # - dvs håller på att kopieras. Tycker fillåset borde ta hand om den saken,
     # men vem vet.
     def general_handler(video)
-      @rblog.info "general_handler is handling #{video.basename}"
+      CLASSLOG.info "general_handler is handling #{video.basename}"
       # TODO: This (and some other) should take some seconds to check that the file is not still growing.
       m4v_video = Handbrake::feed_me(video, @m4ved)
       if m4v_video then
@@ -210,7 +211,7 @@ class Video_archive
     end
 
     def passtrough_with_cleaned_name_handler(video)
-      @rblog.info "passtrough_with_cleaned_name_handler is handling #{video.basename}"
+      CLASSLOG.info "passtrough_with_cleaned_name_handler is handling #{video.basename}"
       video.move_and_clean_me(@m4ved) # Since the file is already in the right format, it is just moved
             # to the output directory. No copy is made to @processed. Name is cleaned up.
       # Todo TILLFALLIGT BORTKOPPLAD   video.add_me_to_iTunes
@@ -218,8 +219,8 @@ class Video_archive
 
     # Stuff we can't handle is moved to failed
     def failed_handler(inp, reason)
-      @rblog.info "Failed to do anything with #{inp.basename}, except moving it to #{@failed}"
-      @rblog.info "This is why: #{reason}"
+      CLASSLOG.info "Failed to do anything with #{inp.basename}, except moving it to #{@failed}"
+      CLASSLOG.info "This is why: #{reason}"
       FileUtils.move(inp, @unsupported + inp.basename) # TODO: Handle overwrites
     end
   end
@@ -228,11 +229,11 @@ class Video_archive
   # Checks if all needed directories exists, and creates them if not
   begin
     def setup_archive_directories
-      @rblog.info "Verifying or creating inbox at '#{@inbox}'"
+      CLASSLOG.info "Verifying or creating inbox at '#{@inbox}'"
       @inbox.mkpath
-      @rblog.debug "Inbox in place"
+      CLASSLOG.debug "Inbox in place"
 
-      @rblog.info "Verifying or creating processed at '#{@processed}'"
+      CLASSLOG.info "Verifying or creating processed at '#{@processed}'"
       @processed.mkpath
       #@current.mkpath
       @originals.mkpath
@@ -240,11 +241,11 @@ class Video_archive
       @unsupported.mkpath
       @failed.mkpath
 
-      @rblog.debug "Exits setup_archive_directories"
+      CLASSLOG.debug "Exits setup_archive_directories"
     end
 
     def cleanup_archive_directories
-      @rblog.info "Removing empty processed directories"
+      CLASSLOG.info "Removing empty processed directories"
       @originals.rmdir     if @originals.delete_dsstore!.children.length == 0
       @m4ved.rmdir         if @m4ved.delete_dsstore!.children.length == 0
       @unsupported.rmdir   if @unsupported.delete_dsstore!.children.length == 0
