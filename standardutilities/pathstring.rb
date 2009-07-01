@@ -187,6 +187,12 @@ class Pathstring < String
     end
     return self
   end
+
+  # For some reason, delete seams unreliable, while unlink works better.
+  def delete
+    raise "For some reason, 'delete' seams unreliable, while 'unlink' works better. So use 'unlink' (at least until
+            switching to Ruby 1.9)."
+  end
   
   # Content of a directory, but with .DS_Store file excluded
   def children_sans_dsstore

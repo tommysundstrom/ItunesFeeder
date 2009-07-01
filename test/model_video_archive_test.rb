@@ -4,11 +4,14 @@ require 'fileutils'
 require 'model_video_archive'
 require 'controller_preferences'
 require 'log'
+require 'test_helpers'
 
 class Video_archive_Test < Test::Unit::TestCase
   CLASSLOG = Log.new("Class: #{self.name}") # Creates a log named 'Class:' + class name + .log
   CLASSLOG.debug "Loaded class '#{self.name}' from '#{__FILE__}'"
   CLASSLOG.debug "Creating '#{self.to_s}'" # Use inside def initialize, to get object id
+
+  include Test_helpers # Provides cleanup_and_setup_workflow_dirs
 
 
   # Called before every test method runs. Can be used
@@ -58,38 +61,10 @@ class Video_archive_Test < Test::Unit::TestCase
       @testdir = Pathstring('~/Programmering/Ruby/Projekt/ItunesFeeder_test/workflow').expand_path # WARNING This dir and
             # its content will be removed.
 
-      # Cleanup and setup directories for testing
-      begin
-        # Delete testdir (and everything in it)
-        begin
-          if @testdir.exist?
-            CLASSLOG.info "Removing the test dir at #{@testdir}"
-            FileUtils.rmtree([@testdir], {:secure=>true}) # This will remove the dir including content. It's a bit
-                  # sensitive about permissions etc, see http://www.ruby-doc.org/core/classes/FileUtils.html#M004366
-            raise "Failed to remove #{@testdir}." if @testdir.exist?
-          else
-            CLASSLOG.debug "No test dir at #{@testdir} (so no need to remove it)."
-          end
-        end
+      CLASSLOG.debug "Removing old a creating new, empty, workflow dirs."
+      cleanup_and_setup_workflow_dirs(@testdir, @video_archive) # included from Test_helpers
 
-        # Create a new testdir
-        begin
-          CLASSLOG.debug "Creating a new testdir at #{@testdir.expand_path}"
-          # Assuming that there is no such dir now
-          raise "Failed to remove #{@testdir}." if @testdir.exist?
-          FileUtils.mkdir(@testdir)
-          assert {@testdir.exist?}
-          CLASSLOG.info "Crated #{@testdir} (used for testing)."
-        end
-
-        # Point the archive to testdir, and create the inbox and the processed dirs
-        begin
-          @video_archive.set_workflow_paths(@testdir) # paths
-          @video_archive.setup_archive_directories    # actual dir creation
-          #@video_archive.set_processed = @testdir
-          #@video_archive.inbox = @testdir + 'inbox'
-        end
-      end 
+    
     end
 
     should "All archive directories should exist" do
