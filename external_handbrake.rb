@@ -24,13 +24,13 @@ class Handbrake
     def self.feed_me(video, processed, type = :normal) # TODO: Settings for :animated  
 
     # Get names
-      out_path = Pathstring(processed).enumbered_add(video.prefered_name)
-      #out_path = Pathstring.new(converted) + (video.prefered_name + ".m4v")
-      if out_path === false
-        CLASSLOG.error "Unable to find a free name for '#{video.prefered_name}' in '#{processed}'."
-        return false  # I.e the video file will be moved away and we can continue with next.
-      end
-      out_path.add_extension('m4v')
+    out_path = Pathstring(processed).enumbered_add(video.prefered_name)
+    #out_path = Pathstring.new(converted) + (video.prefered_name + ".m4v")
+    if out_path === false
+      CLASSLOG.error "Unable to find a free name for '#{video.prefered_name}' in '#{processed}'."
+      return false  # I.e the video file will be moved away and we can continue with next.
+    end
+    out_path.add_extension('m4v')
 
 
     # Check that the file does not already exist
