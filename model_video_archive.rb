@@ -50,6 +50,7 @@ class Video_archive
 
     def set_processed_and_subfolders(processed_path)
       # Possibly erronious thinking - should this not be set in the prefereces object??
+      #   (That way I belive they may be persistent???)
       @processed  = Pathstring.new(processed_path)
       #@current    = @processed + 'current'    # Normaly just contains max one file or directory - the one currently being worked on
       @originals  = @processed + '_originals'  # TODO: Option to move to Trash + option to delete directly

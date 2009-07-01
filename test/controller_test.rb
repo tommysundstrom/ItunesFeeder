@@ -34,7 +34,6 @@ class ControllerTest < Test::Unit::TestCase
     context "Controller object - " do
       setup do
         @c = Controller.new
-        @c.setup_preferences
       end
 
       should "Call awakeFromNib." do
@@ -49,8 +48,6 @@ class ControllerTest < Test::Unit::TestCase
       context "With content in inbox - " do
         setup do
           require 'model_video_archive'
-          @video_archive = Video_archive.new(Preferences.new)
-
           @testdir = Pathstring('~/Programmering/Ruby/Projekt/ItunesFeeder_test/workflow').expand_path # WARNING This dir and
               # its content will be removed.
           @examples = Pathstring(File.dirname(@testdir)) + 'examples'   # Realy belongs to the first child context,
@@ -59,14 +56,14 @@ class ControllerTest < Test::Unit::TestCase
 
                   
           CLASSLOG.debug "Removing old a creating new, empty, workflow dirs."
-          cleanup_and_setup_workflow_dirs(@testdir, @video_archive) # included from Test_helpers
+          cleanup_and_setup_workflow_dirs(@testdir, @c.video_archive) # included from Test_helpers
 
           # Copy testfiles into place
           example = @examples + @example_folder
-          FileUtils.copy_entry(example, @video_archive.inbox, :remove_destination => true)
+          FileUtils.copy_entry(example, @c.video_archive.inbox, :remove_destination => true)
 
           #
-          @video_archive.set_inbox(@video_archive.inbox)    # This is stupid
+          #@c.video_archive.set_inbox(@video_archive.inbox)    # This is stupid
           #@video_archive.set_processed_and_subfolders
         end
 
@@ -74,7 +71,7 @@ class ControllerTest < Test::Unit::TestCase
           result_archive = @examples + (@example_folder.to_s + ' - result')
           FileUtils.rmtree([result_archive], {:secure=>true})
           result_archive.mkdir
-          FileUtils.copy_entry(@video_archive.inbox.dirname, result_archive, :remove_destination => true)
+          FileUtils.copy_entry(@c.video_archive.inbox.dirname, result_archive, :remove_destination => true)
         end
 
         
