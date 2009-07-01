@@ -95,7 +95,7 @@ class Video_archive
 
   # Process inbox
   def process_inbox
-    CLASSLOG.debug "Checking the inbox..."
+    CLASSLOG.debug "Checking the inbox (at '#{@inbox}')."
 
     # First have a quick lookthrough and sort away the items that can not be video files.
     interesting_children = @inbox.children.reject {|t| eyeball(t) == :ignore || eyeball(t) == :not_video }

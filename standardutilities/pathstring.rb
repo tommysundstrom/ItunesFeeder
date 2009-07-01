@@ -183,7 +183,16 @@ class Pathstring < String
   # Mac-centric
   def delete_dsstore!
     if (self + '.DS_Store').exist? then
-      (self + '.DS_Store').unlink
+      OSX::NSLog "self: #{self}"
+      OSX::NSLog "(self + '.DS_Store').exist?: #{(self + '.DS_Store').exist?}"
+      OSX::NSLog "(self + '.DS_Store').to_s: #{(self + '.DS_Store').to_s}"
+      begin
+        File.unlink((self + '.DS_Store').to_s)
+      rescue ArgumentError, e
+        # Just continue
+        OSX::NSLog "Got an argument error when trying to remove the DS_Store-file"
+        OSX::NSLog "(self + '.DS_Store').exist?: #{(self + '.DS_Store').exist?}"
+      end
     end
     return self
   end

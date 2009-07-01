@@ -79,6 +79,13 @@ class ControllerTest < Test::Unit::TestCase
         should "Empty inbox once" do
           @c.empty_inbox_once('dummyvalue')
         end
+
+
+        should "Watch inbox" do
+          # IMPORTANT This is a endless loop (until application quits - so it's not appropriate to have during
+          #     normal testing.
+          ###@c.watch_inbox('dummyvalue')          
+        end
       end
     end
   end

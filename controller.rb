@@ -16,6 +16,9 @@ class Controller < OSX::NSObject
 
     @preferences = Preferences.new
     @video_archive = Video_archive.new(@preferences)
+    # TODO: Move this to user interface and persistance:
+    @video_archive.set_inbox('/Users/Tommy/Programmering/Ruby/Projekt/ItunesFeeder_test/workflow/inbox')
+    @video_archive.set_processed_and_subfolders('/Users/Tommy/Programmering/Ruby/Projekt/ItunesFeeder_test/workflow/processed')
 
     return self
   end
