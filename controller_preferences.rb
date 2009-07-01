@@ -9,7 +9,11 @@
 require 'osx/cocoa'
 require 'pathstring'
 
-class Preferences < OSX::NSObject      
+class Preferences < OSX::NSObject
+  CLASSLOG = Log.new("Class: #{self.name}") # Creates a log named 'Class:' + class name + .log
+  CLASSLOG.debug "Loaded class '#{self.name}' from '#{__FILE__}'"
+  CLASSLOG.debug "Creating '#{self.to_s}'" # Use inside def initialize, to get object id
+
   def init
     super_init
 
@@ -24,6 +28,8 @@ class Preferences < OSX::NSObject
 
   # Checks that inbox and processed directories are on the same volume
   # (since we want to be able to move these big files, not copy them)
+  # Potential BUG: What happens if I want to move both to a diffent volume. Maybe there should be a method for moving
+  #    both at the same time..?
   def register_defaults_for_processed(target_dir)
     if Pathstring.new(inbox).volume == Pathstring.new(target_dir).volume then
         @defaults.registerDefaults(:processed => Pathstring.new(target_dir) )
