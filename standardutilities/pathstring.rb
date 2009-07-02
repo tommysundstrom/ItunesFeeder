@@ -118,10 +118,11 @@ class Pathstring < String
   # Can not move a directory
   ##def mv(destination)
   ##end
-  
+
+
   # Returns a path to 'name' in self. self needs to be a directory.
   # If something with the same name is already present, adds a number to the name and tries again, until success or to many tries.
-  def enumbered_add(name)
+  def next_available_path_for(name, extension)  # TODO Let extension be a part of the name, split with ???
     # CLASSLOG.debug "Adding '#{name}' to '#{self}'."
     if not self.directory? then raise "Can only add #{name} to a directory path." end
 
@@ -165,6 +166,11 @@ class Pathstring < String
   def children_except_those_beginning_with(array_of_beginnings)
     # NOT IMPLEMENTED YET self.children.select {|t| t[0].to_s != '.' }
   end
+
+  # Array of child-files and folders that to not begin their name with a dot. Simpler version than that above
+  def visible_children
+    raise "Not implemented"
+  end
   
   # Array of siblings (not including self)
   def siblings
@@ -181,23 +187,26 @@ class Pathstring < String
   # Removes the .DS_Store file - an autocreated file that just contains the visual settings 
   # for the folder - if there is one. Note that it may quickly be recreated by OSX. 
   # Mac-centric
+  # I've had a great deal of trouble getting this to work reliably. (Theory: DS_Store was somehow
+  # removed between the test and the unlinking.). But the rescue seams to fix that.
   def delete_dsstore!
     if (self + '.DS_Store').exist? then
-      OSX::NSLog "self: #{self}"
-      OSX::NSLog "(self + '.DS_Store').exist?: #{(self + '.DS_Store').exist?}"
-      OSX::NSLog "(self + '.DS_Store').to_s: #{(self + '.DS_Store').to_s}"
+      # OSX::NSLog "self: #{self}"
+      # OSX::NSLog "(self + '.DS_Store').exist?: #{(self + '.DS_Store').exist?}"
+      # OSX::NSLog "(self + '.DS_Store').to_s: #{(self + '.DS_Store').to_s}"
       begin
         File.unlink((self + '.DS_Store').to_s)
       rescue ArgumentError, e
         # Just continue
-        OSX::NSLog "Got an argument error when trying to remove the DS_Store-file"
-        OSX::NSLog "(self + '.DS_Store').exist?: #{(self + '.DS_Store').exist?}"
+        # OSX::NSLog "Got an argument error when trying to remove the DS_Store-file"
+        # OSX::NSLog "(self + '.DS_Store').exist?: #{(self + '.DS_Store').exist?}"
       end
     end
     return self
   end
 
-  # For some reason, delete seams unreliable, while unlink works better.
+  # For some reason, delete seams unreliable, while unlink works better. <- This may be a faulty conclusion,
+  #     drawn from the problems with DS_Store. See above.
   def delete
     raise "For some reason, 'delete' seams unreliable, while 'unlink' works better. So use 'unlink' (at least until
             switching to Ruby 1.9)."

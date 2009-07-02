@@ -23,24 +23,7 @@ class Handbrake
 
     def self.feed_me(video, processed, type = :normal) # TODO: Settings for :animated  
 
-    # Get names
-    out_path = Pathstring(processed).enumbered_add(video.prefered_name)
-    #out_path = Pathstring.new(converted) + (video.prefered_name + ".m4v")
-    if out_path === false
-      CLASSLOG.error "Unable to find a free name for '#{video.prefered_name}' in '#{processed}'."
-      return false  # I.e the video file will be moved away and we can continue with next.
-    end
-    out_path.add_extension('m4v')
-
-
-    # Check that the file does not already exist
-      #if out_path.exist? then
-       # CLASSLOG.warn "#{out_path} exists already, so cannot process #{video.basename}."
-        # raise # TODO: fix this and handler for it
-        #return
-      #end
-
-    # Feed it to Handbrake
+      # Feed it to Handbrake
       CLASSLOG.info "Feeding '#{video.file.basename}' to Handbrake"
       stdin, stdout, stderr = Open3.popen3("HandBrakeCLI -i \"#{video.file}\" -o \"#{out_path}\"  --ipod-atom -e x264 -q 0.59 -9 -5 -a 1 -E faac -B 128 -R 48 -6 dpl2 -f mp4 -X 480 -x level=30:cabac=0:ref=2:mixed-refs:analyse=all:me=umh:no-fast-pskip=1")
           # Note: Handbrake gives its essential results through stderr
