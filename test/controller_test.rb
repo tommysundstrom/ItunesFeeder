@@ -50,9 +50,8 @@ class ControllerTest < Test::Unit::TestCase
           require 'model_video_archive'
           @testdir = Pathstring('~/Programmering/Ruby/Projekt/ItunesFeeder_test/workflow').expand_path # WARNING This dir and
               # its content will be removed.
-          @examples = Pathstring(File.dirname(@testdir)) + 'examples'   # Realy belongs to the first child context,
-                # but for some reason it works better here. OR NOT
-          @example_folder = 'controller_test_A'    # dito
+          @examples = Pathstring(File.dirname(@testdir)) + 'examples'
+          @example_folder = 'controller_test_A'   
 
                   
           CLASSLOG.debug "Removing old a creating new, empty, workflow dirs."
@@ -73,19 +72,54 @@ class ControllerTest < Test::Unit::TestCase
           result_archive.mkdir
           FileUtils.copy_entry(@c.video_archive.inbox.dirname, result_archive, :remove_destination => true)
         end
-
-        
-
+    
         should "Empty inbox once" do
           @c.empty_inbox_once('dummyvalue')
         end
 
+        # For test of watching, see should "Watch inbox" in watch_inbox_testloop
 
-        should "Watch inbox" do
-          # IMPORTANT This is a endless loop (until application quits - so it's not appropriate to have during
-          #     normal testing.
-          ###@c.watch_inbox('dummyvalue')          
+
+      end
+
+      context "With conflikting content in inbox - " do
+        setup do
+          require 'model_video_archive'
+          @testdir = Pathstring('~/Programmering/Ruby/Projekt/ItunesFeeder_test/workflow').expand_path # WARNING This dir and
+              # its content will be removed.
+          @examples = Pathstring(File.dirname(@testdir)) + 'examples'
+          # @example_folder = 'duplicate file name'
+
+
+          CLASSLOG.debug "Removing old a creating new, empty, workflow dirs."
+          cleanup_and_setup_workflow_dirs(@testdir, @c.video_archive) # included from Test_helpers
+
+          # Copy testfiles into place
+          example_inbox = @examples + 'duplicate file name' + 'inbox'
+          FileUtils.copy_entry(example_inbox, @c.video_archive.inbox, :remove_destination => true)
+
+          example_m4v = @examples + 'duplicate file name' + 'processed' + '_m4ved'
+          FileUtils.copy_entry(example_m4v, @c.video_archive.inbox, :remove_destination => true)
+
+          #
+          #@c.video_archive.set_inbox(@video_archive.inbox)    # This is stupid
+          #@video_archive.set_processed_and_subfolders
         end
+
+        teardown do
+=begin   # Trying without teardown
+          result_archive = @examples + (@example_folder.to_s + ' - result')
+          FileUtils.rmtree([result_archive], {:secure=>true})
+          result_archive.mkdir
+          FileUtils.copy_entry(@c.video_archive.inbox.dirname, result_archive, :remove_destination => true)
+=end
+        end
+
+        should "Find an alternative name, if the prefered name is already taken" do
+            
+        end
+
+        
       end
     end
   end
