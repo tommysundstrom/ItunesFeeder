@@ -107,7 +107,7 @@ class ControllerTest < Test::Unit::TestCase
         end
 
         teardown do
-=begin   # Trying without teardown
+=begin
           result_archive = @examples + (@example_folder.to_s + ' - result')
           FileUtils.rmtree([result_archive], {:secure=>true})
           result_archive.mkdir

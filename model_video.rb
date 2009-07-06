@@ -8,12 +8,15 @@
 
 # A file with video contents
 class Video
+  CLASSLOG = Log.new("Class: #{self.name}") # Creates a log named 'Class:' + class name + .log
+  CLASSLOG.debug "Loaded class '#{self.name}' from '#{__FILE__}'"
+
   attr_reader :file, :basename, :extension, :name
   attr_accessor :prefered_name
 
   def initialize(file)
-    @rblog = Log.new(__FILE__)
-    @rblog.debug "Initializing #{self.to_s}."
+    CLASSLOG.debug "Creating '#{self.to_s}'." # Use inside def initialize, to get object id
+    CLASSLOG.debug "Initializing #{self.to_s}."
     
     @file = Pathname.new(file)  # TODO: Make sure the file is not growing (= is currently written)
     @basename = @file.basename
@@ -32,9 +35,9 @@ class Video
       cruft = [ "HDTV", "LOL", "Parabolmannen", "SweSub", "VTV", "XviD-.*", "XviD", "ws",
                 "pdtv", "DVDrip", "AC3_2008", "AC3_2009", "AC3_2010", "AC3_2011", "AC3_2012",
                 "ENG-DUQA", "MM" ]  # Stuff that we want to remove from the name
-      @rblog.debug "name: #{name}"
+      CLASSLOG.debug "name: #{name}"
       nameparts = name.split(/\./)
-      @rblog.debug "nameparts: #{'<' + nameparts.join('> <') + '>'}"
+      CLASSLOG.debug "nameparts: #{'<' + nameparts.join('> <') + '>'}"
       cruftfree_nameparts = nameparts[1..-1].select {|p| cruft.select {|c| /^\[?#{c}\]?$/i.match(p)} == [] }
           # (Keep (=select) those nameparts where matching aginst the cruft list comes up empty)
           # First item of the name is always protected
@@ -71,7 +74,7 @@ class Video
       clean_name = clean_name.strip
     end
 
-    @rblog.info "Cleaned up '#{name}' to '#{clean_name}'"
+    CLASSLOG.info "Cleaned up '#{name}' to '#{clean_name}'"
     return clean_name
   end
 
@@ -114,8 +117,9 @@ class Video
 
   # Moves the file using the prefered_name
   def move_and_clean_me(target)
-    @rblog.debug "Clean #{file.basename} and move to #{target}"
-    move_me(target, @prefered_name + @extension)
+    target = Pathstring(target)
+    CLASSLOG.debug "Clean #{file.basename} and move to #{target.next_available_path_for(@prefered_name + @extension)}"
+    move_me(target, target.next_available_path_for(@prefered_name + @extension))
   end
 
   # Tell iTunes to add the file

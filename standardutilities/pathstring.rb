@@ -2,7 +2,7 @@
 #  Pathstring.rb
 #  ItunesFeeder
 #
-#  Created by Tommy Sundstr‚Äö√†√∂‚Äö√†√ám on 25/2-09.
+#  Created by Tommy Sundstr‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ‚Äö√Ñ√∂‚àö‚Ä†‚àö√°m on 25/2-09.
 #  Copyright (c) 2009 Helt Enkelt ab. All rights reserved.
 #
 
@@ -38,8 +38,8 @@ class Pathstring < String
   
   def method_missing(symbol, *args)
     result = @pathname.__send__(symbol, *args)      # BUG BUG BUG   Ibland ger pathname andra sorters svar, t.ex. sant/falsk eller en array
-          # N‚Äö√†√∂¬¨√ür det inte ‚Äö√†√∂¬¨√ür en Pathname objekt jag f‚Äö√†√∂‚Äö√Ñ¬¢r tillbaka, m‚Äö√†√∂‚Äö√Ñ¬¢ste jag sl‚Äö√†√∂¬¨√üppa vidare svaret som det ‚Äö√†√∂¬¨√ür (typ)
-          # Fast ev kolla p‚Äö√†√∂‚Äö√Ñ¬¢ inneh‚Äö√†√∂‚Äö√Ñ¬¢llet i arrayen (t.ex. n‚Äö√†√∂¬¨√ür det ‚Äö√†√∂¬¨√ür children, och Pathstringa dem.
+          # N‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ¬¨¬®‚àö√ºr det inte ‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ¬¨¬®‚àö√ºr en Pathname objekt jag f‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ‚Äö√Ñ√∂‚àö√ë¬¨¬¢r tillbaka, m‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ‚Äö√Ñ√∂‚àö√ë¬¨¬¢ste jag sl‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ¬¨¬®‚àö√ºppa vidare svaret som det ‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ¬¨¬®‚àö√ºr (typ)
+          # Fast ev kolla p‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ‚Äö√Ñ√∂‚àö√ë¬¨¬¢ inneh‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ‚Äö√Ñ√∂‚àö√ë¬¨¬¢llet i arrayen (t.ex. n‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ¬¨¬®‚àö√ºr det ‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ¬¨¬®‚àö√ºr children, och Pathstringa dem.
     if result.class == Pathname then
       return Pathstring.new(result)
     elsif result.class == Array  then
@@ -78,7 +78,7 @@ class Pathstring < String
     
   # Like Dir.mkdir, but without the error if a folder is already in place
   # The most common error is SystemCallError = The direcotry cannot be created
-  def ANVANDS_EJensure_directory   # ANV‚Äö√†√∂‚àö√´ND MKPATH IST‚Äö√†√∂‚àö√´LLET!!!!
+  def ANVANDS_EJensure_directory   # ANV‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ‚Äö√†√∂‚àö¬¥ND MKPATH IST‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ‚Äö√†√∂‚àö¬¥LLET!!!!
     #CLASSLOG.debug "Enters ensure_directory. self: #{self}"
     if self.exist? then 
       #CLASSLOG.debug "#{self} alredy existed"
@@ -130,18 +130,17 @@ class Pathstring < String
     name = File.basename(basename, extname) # Removes extname from basename
 
     new_path = self + (name + extname)
-    OSX::NSLog "Pathstring - self: #{self}"
-    OSX::NSLog "Pathstring - name: #{name}"
-    OSX::NSLog "Pathstring - new_path (i pathstring) pre: #{new_path}"
+    #OSX::NSLog "Pathstring - self: #{self}"
+    #OSX::NSLog "Pathstring - name: #{name}"
+    #OSX::NSLog "Pathstring - new_path (i pathstring) pre: #{new_path}"
     # Check if there already is a fsitem with this path
     if new_path.exist?
       # Needs to change name, until I find something that is not already used
       for n in 1..9999 do
         new_path = self + (name + " %04d" % n + extname)   # adds for example 0012 to the name
-        OSX::NSLog "Pathstring - new_path (i pathstring): #{new_path}"
-        OSX::NSLog "Pathstring - n: #{n}"
-
-        OSX::NSLog "Pathstring - extname: #{extname}"
+        #OSX::NSLog "Pathstring - new_path (i pathstring): #{new_path}"
+        #OSX::NSLog "Pathstring - n: #{n}"
+        #OSX::NSLog "Pathstring - extname: #{extname}"
         if not new_path.exist?
           return Pathstring(new_path) # Returns a free name
         end
@@ -250,7 +249,7 @@ class Pathstring < String
     raise 'Unable to find an application name.'
   end
   
-  # Array of the basenames of the children TROR DETTA REDAN ‚Äö√†√∂‚àö√´R T‚Äö√†√∂‚àö√´CKT AV TYP Dir*
+  # Array of the basenames of the children TROR DETTA REDAN ‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ‚Äö√†√∂‚àö¬¥R T‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ‚Äö√†√∂‚àö¬¥CKT AV TYP Dir*
   def children_basename
   
   end

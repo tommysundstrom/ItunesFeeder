@@ -110,6 +110,7 @@ class Video_archive_Test < Test::Unit::TestCase
         @examples = Pathstring(File.dirname(@testdir)) + 'examples'        
       end
 
+=begin
       context "A - " do        
         setup do
           # Copy testfiles into place
@@ -148,6 +149,51 @@ class Video_archive_Test < Test::Unit::TestCase
           end
         end
       end
+=end
+
+      context "avi - " do
+        setup do
+          # Copy testfiles into place
+          @example_folder = 'avi'
+          example = @examples + @example_folder
+          FileUtils.copy_entry(example, @video_archive.inbox, :remove_destination => true)
+        end
+
+        teardown do
+          result_archive = @examples + (@example_folder.to_s + ' - result')
+          FileUtils.rmtree([result_archive], {:secure=>true})
+          result_archive.mkdir
+          FileUtils.copy_entry(@video_archive.inbox.dirname, result_archive, :remove_destination => true)
+        end
+
+        should "Process the file" do
+          assert_nothing_raised { @video_archive.process_inbox }
+        end
+
+        context "Processed - " do
+          setup do
+            @video_archive.process_inbox
+          end
+
+          should "All archive directories should exist" do
+            assert { @video_archive.inbox.exist? }
+            assert { @video_archive.processed.exist? }
+            assert { @video_archive.originals.exist? }
+            assert { @video_archive.unsupported.exist? }
+            assert { @video_archive.failed.exist? }
+            assert { @video_archive.m4ved.exist? }
+          end
+
+          should "Convert the file to m4v." do
+            assert { (@video_archive.m4ved + 'avi-Helgmalsringning.m4v').exist? }
+          end
+
+          should "Move the original to the processed folder" do
+            assert { (@video_archive.originals + 'avi-Helgmalsringning.avi').exist? }            
+          end
+        end
+      end
+
     end
   end
 end

@@ -199,8 +199,11 @@ class Video_archive
     def general_handler(video)
       CLASSLOG.info "general_handler is handling #{video.basename}"
       # TODO: This (and some other) should take some seconds to check that the file is not still growing.
-      basename = available_path_for(video).add_extension('m4v').basename
-      m4v_video = Handbrake::feed_me(video, @m4ved, basename)
+      @extension = '.m4v'    # TODO Decide if available_naming & extension goes here or in video. Right now it's in
+            # both places.
+      basename = @m4ved.next_available_path_for(video.prefered_name + @extension).basename
+      #basename = available_path_for(video).add_extension('m4v').basename
+      m4v_video = Handbrake::feed_me(video, @m4ved + basename)
       if m4v_video then
         video.move_me(@originals) # Move the processed file.
         # Todo TILLFALLIGT BORTKOPPLAD   m4v_video.add_me_to_iTunes

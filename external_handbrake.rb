@@ -25,7 +25,7 @@ class Handbrake
 
       # Feed it to Handbrake
       CLASSLOG.info "Feeding '#{video.file.basename}' to Handbrake"
-      stdin, stdout, stderr = Open3.popen3("HandBrakeCLI -i \"#{video.file}\" -o \"#{out_path}\"  --ipod-atom -e x264 -q 0.59 -9 -5 -a 1 -E faac -B 128 -R 48 -6 dpl2 -f mp4 -X 480 -x level=30:cabac=0:ref=2:mixed-refs:analyse=all:me=umh:no-fast-pskip=1")
+      stdin, stdout, stderr = Open3.popen3("HandBrakeCLI -i \"#{video.file}\" -o \"#{processed}\"  --ipod-atom -e x264 -q 0.59 -9 -5 -a 1 -E faac -B 128 -R 48 -6 dpl2 -f mp4 -X 480 -x level=30:cabac=0:ref=2:mixed-refs:analyse=all:me=umh:no-fast-pskip=1")
           # Note: Handbrake gives its essential results through stderr
           # and uses stdout to report progress.
       #Log.info "Handbrake result: \n#{stderr.read}"
@@ -53,7 +53,7 @@ class Handbrake
         when 'Rip done!'
           # Make a video object of the converted file, to feed into iTunes
           CLASSLOG.info "Rip done!"
-          m4v_video = Video.new(out_path)
+          m4v_video = Video.new(processed)
           # ...and feed it to iTunes
           return m4v_video
         when 'No title found.'
