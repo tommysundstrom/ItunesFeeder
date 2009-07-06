@@ -95,11 +95,11 @@ class ControllerTest < Test::Unit::TestCase
           cleanup_and_setup_workflow_dirs(@testdir, @c.video_archive) # included from Test_helpers
 
           # Copy testfiles into place
-          example_inbox = @examples + 'duplicate file name' + 'inbox'
+          example_inbox = @examples + 'duplicate file name' + 'in inbox'
           FileUtils.copy_entry(example_inbox, @c.video_archive.inbox, :remove_destination => true)
 
-          example_m4v = @examples + 'duplicate file name' + 'processed' + '_m4ved'
-          FileUtils.copy_entry(example_m4v, @c.video_archive.inbox, :remove_destination => true)
+          example_m4v = @examples + 'duplicate file name' + 'in m4v'
+          FileUtils.copy_entry(example_m4v, @c.video_archive.m4ved, :remove_destination => true)
 
           #
           #@c.video_archive.set_inbox(@video_archive.inbox)    # This is stupid
@@ -116,9 +116,16 @@ class ControllerTest < Test::Unit::TestCase
         end
 
         should "Find an alternative name, if the prefered name is already taken" do
-            
+          m4v_dir = Pathstring('/Users/Tommy/Programmering/Ruby/Projekt/ItunesFeeder_test/workflow/processed/_m4ved')
+          prefered_file_name = 'm4v-Helgmalsringning.iPodBest.m4v'
+          CLASSLOG.debug "Prefered file name: #{prefered_file_name}"
+          new_path = m4v_dir.next_available_path_for(prefered_file_name)
+          CLASSLOG.debug "Available file name: #{File.basename(new_path)}"
+          CLASSLOG.debug "new_path: #{new_path}"
+          assert {File.basename(new_path) == 'm4v-Helgmalsringning.iPodBest 0001.m4v'}
+          assert {File.dirname(new_path) == m4v_dir}
         end
-
+                           
         
       end
     end

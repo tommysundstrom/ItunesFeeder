@@ -2,7 +2,7 @@
 #  Pathstring.rb
 #  ItunesFeeder
 #
-#  Created by Tommy Sundstr√∂m on 25/2-09.
+#  Created by Tommy Sundstr‚Äö√†√∂‚Äö√†√ám on 25/2-09.
 #  Copyright (c) 2009 Helt Enkelt ab. All rights reserved.
 #
 
@@ -38,8 +38,8 @@ class Pathstring < String
   
   def method_missing(symbol, *args)
     result = @pathname.__send__(symbol, *args)      # BUG BUG BUG   Ibland ger pathname andra sorters svar, t.ex. sant/falsk eller en array
-          # N√§r det inte √§r en Pathname objekt jag f√•r tillbaka, m√•ste jag sl√§ppa vidare svaret som det √§r (typ)
-          # Fast ev kolla p√• inneh√•llet i arrayen (t.ex. n√§r det √§r children, och Pathstringa dem.
+          # N‚Äö√†√∂¬¨√ür det inte ‚Äö√†√∂¬¨√ür en Pathname objekt jag f‚Äö√†√∂‚Äö√Ñ¬¢r tillbaka, m‚Äö√†√∂‚Äö√Ñ¬¢ste jag sl‚Äö√†√∂¬¨√üppa vidare svaret som det ‚Äö√†√∂¬¨√ür (typ)
+          # Fast ev kolla p‚Äö√†√∂‚Äö√Ñ¬¢ inneh‚Äö√†√∂‚Äö√Ñ¬¢llet i arrayen (t.ex. n‚Äö√†√∂¬¨√ür det ‚Äö√†√∂¬¨√ür children, och Pathstringa dem.
     if result.class == Pathname then
       return Pathstring.new(result)
     elsif result.class == Array  then
@@ -78,7 +78,7 @@ class Pathstring < String
     
   # Like Dir.mkdir, but without the error if a folder is already in place
   # The most common error is SystemCallError = The direcotry cannot be created
-  def ANVANDS_EJensure_directory   # ANV√ÑND MKPATH IST√ÑLLET!!!!
+  def ANVANDS_EJensure_directory   # ANV‚Äö√†√∂‚àö√´ND MKPATH IST‚Äö√†√∂‚àö√´LLET!!!!
     #CLASSLOG.debug "Enters ensure_directory. self: #{self}"
     if self.exist? then 
       #CLASSLOG.debug "#{self} alredy existed"
@@ -122,21 +122,31 @@ class Pathstring < String
 
   # Returns a path to 'name' in self. self needs to be a directory.
   # If something with the same name is already present, adds a number to the name and tries again, until success or to many tries.
-  def next_available_path_for(name, extension)  # TODO Let extension be a part of the name, split with ???
-    # CLASSLOG.debug "Adding '#{name}' to '#{self}'."
+  def next_available_path_for(basename)  # TODO Let extension be a part of the name, split with ???
     if not self.directory? then raise "Can only add #{name} to a directory path." end
 
-    new_path = self + name
+    # Splitting the basename into useful parts
+    extname = File.extname(basename)  # (Includes the dot)
+    name = File.basename(basename, extname) # Removes extname from basename
+
+    new_path = self + (name + extname)
+    OSX::NSLog "Pathstring - self: #{self}"
+    OSX::NSLog "Pathstring - name: #{name}"
+    OSX::NSLog "Pathstring - new_path (i pathstring) pre: #{new_path}"
     # Check if there already is a fsitem with this path
     if new_path.exist?
       # Needs to change name, until I find something that is not already used
       for n in 1..9999 do
-        new_path = self + name + " %04d" % n   # adds for example 0012 to the name
+        new_path = self + (name + " %04d" % n + extname)   # adds for example 0012 to the name
+        OSX::NSLog "Pathstring - new_path (i pathstring): #{new_path}"
+        OSX::NSLog "Pathstring - n: #{n}"
+
+        OSX::NSLog "Pathstring - extname: #{extname}"
         if not new_path.exist?
           return Pathstring(new_path) # Returns a free name
         end
       end
-      CLASSLOG.warning "Unable to find a free name for '#{name}'."
+      OSX::NSLog "Pathstring - WARNING: Unable to find a free name for '#{name}'."
       return false
     end
     return Pathstring(new_path)
@@ -240,7 +250,7 @@ class Pathstring < String
     raise 'Unable to find an application name.'
   end
   
-  # Array of the basenames of the children TROR DETTA REDAN √ÑR T√ÑCKT AV TYP Dir*
+  # Array of the basenames of the children TROR DETTA REDAN ‚Äö√†√∂‚àö√´R T‚Äö√†√∂‚àö√´CKT AV TYP Dir*
   def children_basename
   
   end
