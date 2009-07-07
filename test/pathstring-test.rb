@@ -41,6 +41,10 @@ class PathstringTests < Test::Unit::TestCase
     should_eventually "Be a string" do
       # Something that tests that a subclass is a kind of superclass (String, Pathstring.new('abc') )
     end
+
+    should "Return the basename as a string." do
+      assert { Pathstring(@path_file_on_internal).basename.class == String }  
+    end
     
     should "Create an object, with Pathstring() or Path() as well as Pathsring.new()" do
       assert_nothing_raised { Pathstring.new('abc') }

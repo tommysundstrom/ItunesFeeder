@@ -193,7 +193,11 @@ class Pathstring < String
   def siblings
     self.parent.children.reject {|t| t == self }
   end
-  
+
+  # Returns basename (the last node of the path) as a string (not as a Pathstring)
+  def basename
+    return File.basename(self)
+  end
   
   # Removes the extension from the basename
   # Counterpart to extname
