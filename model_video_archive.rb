@@ -201,7 +201,7 @@ class Video_archive
       # TODO: This (and some other) should take some seconds to check that the file is not still growing.
       @extension = '.m4v'    # TODO Decide if available_naming & extension goes here or in video. Right now it's in
             # both places.
-      basename = @m4ved.next_available_path_for(video.prefered_name + @extension).basename
+      basename = @m4ved.next_available_path_for(video.prefered_name + @extension).basename # TODO Change Pathstring so that this returns a string!!!
       #basename = available_path_for(video).add_extension('m4v').basename
       m4v_video = Handbrake::feed_me(video, @m4ved / basename)
       if m4v_video then

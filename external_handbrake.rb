@@ -21,54 +21,66 @@ class Handbrake
     CLASSLOG.debug "Loaded class '#{self.name}' from '#{__FILE__}'"
     CLASSLOG.debug "Creating '#{self.to_s}." # Use inside def initialize, to get object id
 
-    def self.feed_me(video, processed, type = :normal) # TODO: Settings for :animated  
+    def self.feed_me(video, converted_path, type = :normal) # TODO: Settings for :animated
+      if converted_path.exist? then raise "There already is a file at #{converted_path}." end # This should never happen.
 
       # Feed it to Handbrake
       CLASSLOG.info "Feeding '#{video.file.basename}' to Handbrake"
-      stdin, stdout, stderr = Open3.popen3("HandBrakeCLI -i \"#{video.file}\" -o \"#{processed}\"  --ipod-atom -e x264 -q 0.59 -9 -5 -a 1 -E faac -B 128 -R 48 -6 dpl2 -f mp4 -X 480 -x level=30:cabac=0:ref=2:mixed-refs:analyse=all:me=umh:no-fast-pskip=1")
+      # test = "HandBrakeCLI -i \"#{video.file}\" -o \"#{converted_path}\"  --ipod-atom -e x264 -q 0.59 -9 -5 -a 1 -E faac -B 128 -R 48 -6 dpl2 -f mp4 -X 480 -x level=30:cabac=0:ref=2:mixed-refs:analyse=all:me=umh:no-fast-pskip=1"
+      stdin, stdout, stderr = Open3.popen3("HandBrakeCLI -i \"#{video.file}\" -o \"#{converted_path}\"  --ipod-atom -e x264 -q 0.59 -9 -5 -a 1 -E faac -B 128 -R 48 -6 dpl2 -f mp4 -X 480 -x level=30:cabac=0:ref=2:mixed-refs:analyse=all:me=umh:no-fast-pskip=1")
+      CLASSLOG.debug "Handbrake returned after processing '#{video.file.basename}'."   
           # Note: Handbrake gives its essential results through stderr
           # and uses stdout to report progress.
       #Log.info "Handbrake result: \n#{stderr.read}"
       #stderr.rewind
 
-      # Log.debug "Handbrake stdout:  #{stdout.read}"
-
-        # K€NNS INTE HELT HUNDRA. KANSKE VORE DET B€TTRE ATT IST€LLET KOLLA OM RUSULTATFILEN DYKT UPP
+      # Start analyzing Handbrake output
       lines = []
       result = ''
       stderr.each_line{|line| lines << line}
-      CLASSLOG.debug "Original no of lines: #{lines.length}"
-      while lines.length > 0 do
-        lastline = lines.pop.strip
-        CLASSLOG.debug "Checking line #{lines.length + 1}: '#{lastline}'"
-        if lastline == 'HandBrake has exited.' then
-          # Result is reported on the line before this one
-          result = lines.pop.strip
-          CLASSLOG.debug "HandBrake result: #{result}"
-          break
+
+      # First of all, check that there now is a file at converted_path
+      if not converted_path.exist?
+        CLASSLOG.warning "Handbrake failed to convert '#{video.file}' into '#{converted_path}'."
+        CLASSLOG.warning "--- This is what Handbrake reported: ---"
+        lines.each {|line| CLASSLOG.warning line}
+        CLASSLOG.warning "----------------------------------------"
+        return false
+      else
+        # An output file has been created. But still need to check Handbrake output.
+
+        while lines.length > 0 do
+          lastline = lines.pop.strip # (stderr is read from last line to first)     
+          CLASSLOG.debug "Checking line #{lines.length + 1}: '#{lastline}'"
+          if lastline == 'HandBrake has exited.' then
+            # Result is reported on the line before this one
+            result = lines.pop.strip
+            CLASSLOG.debug "HandBrake result: #{result}"
+            break
+          end
+        end
+
+        case result
+          when 'Rip done!'
+            # Make a video object of the converted file, to feed into iTunes
+            CLASSLOG.info "Rip done!"
+            m4v_video = Video.new(converted_path)
+            # ...and feed it to iTunes
+            return m4v_video
+          when 'No title found.'
+            # Handbrake did not manage to convert the file.
+            CLASSLOG.warn "No title found - failed to convert #{video.file.basename}"
+            return false
+          when ''
+            CLASSLOG.warn "No result. Never found 'HandBrake has exited'"
+            return false
+          else
+            CLASSLOG.error "HandBrake returned unknown result: #{result}"
+            raise "HandBrake returned unknown result: #{result}"
         end
       end
 
-      case result
-        when 'Rip done!'
-          # Make a video object of the converted file, to feed into iTunes
-          CLASSLOG.info "Rip done!"
-          m4v_video = Video.new(processed)
-          # ...and feed it to iTunes
-          return m4v_video
-        when 'No title found.'
-          # Handbrake did not manage to convert the file.
-          CLASSLOG.warn "No title found - failed to convert #{video.file.basename}"
-          return false
-        when ''
-          CLASSLOG.warn "No result. Never found 'HandBrake has exited'"
-          return false
-        else
-          CLASSLOG.error "HandBrake returned unknown result: #{result}"
-          raise "HandBrake returned unknown result: #{result}"
-      end
-
-    # TODO: Send a message that the conversion has been done (by mail?)
+    # TODO: Send a message that the conversion has been done (or failed) (by mail?)
   end
 
   # Removes the extension from a filename

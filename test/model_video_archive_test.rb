@@ -185,11 +185,11 @@ class Video_archive_Test < Test::Unit::TestCase
           end
 
           should "Convert the file to m4v." do
-            assert { (@video_archive.m4ved / 'avi-Helgmalsringning.m4v').exist? }
+            assert { (@video_archive.m4ved / 'avi - Brotts och boj iMovie.m4v').exist? }
           end
 
           should "Move the original to the processed folder" do
-            assert { (@video_archive.originals / 'avi-Helgmalsringning.avi').exist? }
+            assert { (@video_archive.originals / 'avi - Brotts och boj iMovie.avi').exist? }
           end
         end
       end
