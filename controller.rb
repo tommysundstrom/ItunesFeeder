@@ -77,6 +77,7 @@ class Controller < OSX::NSObject
   end
 
   def watch_inbox(sender)
+    OSX::NSLog "Now watching inbox '#{@video_archive.inbox}'."
     Log.info "Watching inbox"
     @rblog.debug "Started by #{sender}"
     # TODO A better way to loop: http://www.rubyinside.com/robustthread-for-safer-ruby-daemons-1948.html

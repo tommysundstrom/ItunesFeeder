@@ -84,32 +84,38 @@ class Video
   #
   # TODO: Check if destination is on other drive. In that case, make copy there and delete original (once the copy is confirmed).
   #
+  # It's generally a bit confused with the target, target_file etc stuff. It should be refactored away. 
   def move_me(target, the_basename = @basename)
-    target = Pathname.new(target)
+    target = Pathstring.new(target)
     Log.debug("Move #{file.basename} to #{target}")
 
     # Make it a full path
     if target.directory? then # (When moveto is a file path, then no changes are made to it.)
-      target = target + the_basename
+      target_file = target / the_basename
+    else
+      target_file = target
     end
 
     # Make sure the target directory exists
-    Log.debug "Making sure all directories for #{target} exists."
+    Log.debug "Making sure all directories for #{target_file} exists."
     # File.makedirs(target) # Make sure the directory exists   makedirs comes in 1.9??
-    if not target.dirname.exist? then raise "Target directory for #{target} is missing" end   # Temp solution
+    if not target_file.dirname.exist? then raise "Target directory for #{target_file} is missing" end   # Temp solution
 
     # Make sure there does not already exist a file with the same name
-    if target.exist? then
-      Log.warn "A file with that name already exists (#{target})."
-      return # Aborts   TODO: ev rename etc.
+    if target_file.exist? then
+      new_target_file = target_file.parent.next_available_path_for(target_file)
+      CLASSLOG.info "'#{target_file}' already exist in '#{target_file.parent}', so renaming original file to '#{new_target_file}'."
+      target_file = new_target_file
+      # Log.warn "A file with that name already exists (#{target_file})."
+      # return # Aborts   TODO: ev rename etc.
     end
 
     # Make the move
-    Log.debug "Moves #{@basename} to #{target}."
-    @file.rename(target)
+    Log.debug "Moves #{@basename} to #{target_file}."
+    @file.rename(target_file)
 
     # Internal bookkeeping
-    @file = target
+    @file = target_file
     @extension = @file.extname
     @basename = @file.basename # Note, the file may have been renamed in the move
     @name = File::basename(@file.to_s, @extension)

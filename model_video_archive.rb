@@ -10,6 +10,7 @@ require 'pathstring'
 require 'fileutils'
 require 'external_handbrake'
 require 'model_video'
+require 'osx/cocoa'
 
 # A video_archive is a collection of videos (and some other files)
 #
@@ -46,12 +47,16 @@ class Video_archive
   begin
     def set_inbox(inbox_path)
       @inbox      = Pathstring.new(inbox_path)
+      CLASSLOG.debug "Inbox dir: #{@inbox}"
+      OSX::NSLog "Inbox dir: #{@inbox}"
     end
 
     def set_processed_and_subfolders(processed_path)
       # Possibly erronious thinking - should this not be set in the prefereces object??
       #   (That way I belive they may be persistent???)
       @processed  = Pathstring.new(processed_path)
+      CLASSLOG.debug "Processed files goes to: #{@processed}"
+      OSX::NSLog "Processed files goes to: #{@processed}"
       #@current    = @processed + 'current'    # Normaly just contains max one file or directory - the one currently being worked on
       @originals  = @processed / '_originals'  # TODO: Option to move to Trash + option to delete directly
       @unsupported = @originals / '_unsupported'
