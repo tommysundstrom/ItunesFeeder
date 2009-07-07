@@ -59,6 +59,8 @@ class Pathstring < String
   def +(path)   # Overrides String behaviour.
     return Pathstring.new( (@pathname + Pathname.new(path)) )
   end
+
+  
   
   # Differs from Pathname mkpath in that it also handles file paths
   def mkpath
