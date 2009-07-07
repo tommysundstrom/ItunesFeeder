@@ -39,7 +39,7 @@ class Watch_inbox_Test < Test::Unit::TestCase
           require 'model_video_archive'
           @testdir = Pathstring('~/Programmering/Ruby/Projekt/ItunesFeeder_test/workflow').expand_path # WARNING This dir and
               # its content will be removed.
-          @examples = Pathstring(File.dirname(@testdir)) + 'examples'   # Realy belongs to the first child context,
+          @examples = Pathstring(File.dirname(@testdir)) / 'examples'   # Realy belongs to the first child context,
                 # but for some reason it works better here. OR NOT
           @example_folder = 'controller_test_A'    # dito
 
@@ -48,7 +48,7 @@ class Watch_inbox_Test < Test::Unit::TestCase
           cleanup_and_setup_workflow_dirs(@testdir, @c.video_archive) # included from Test_helpers
 
           # Copy testfiles into place
-          example = @examples + @example_folder
+          example = @examples / @example_folder
           FileUtils.copy_entry(example, @c.video_archive.inbox, :remove_destination => true)
 
           #
@@ -57,7 +57,7 @@ class Watch_inbox_Test < Test::Unit::TestCase
         end
 
         teardown do
-          result_archive = @examples + (@example_folder.to_s + ' - result')
+          result_archive = @examples / (@example_folder.to_s + ' - result')
           FileUtils.rmtree([result_archive], {:secure=>true})
           result_archive.mkdir
           FileUtils.copy_entry(@c.video_archive.inbox.dirname, result_archive, :remove_destination => true)

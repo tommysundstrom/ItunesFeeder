@@ -329,7 +329,7 @@
 										<key>_historyCapacity</key>
 										<integer>40</integer>
 										<key>bookmark</key>
-										<string>6549A2000FFB7C5B007BA717</string>
+										<string>6549A2051003B34F007BA717</string>
 										<key>history</key>
 										<array>
 											<string>6510BCF90FF765E700672B62</string>
@@ -532,9 +532,11 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1C78EAAD065D492600B07095</string>
+		<string>6549A2061003B34F007BA717</string>
+		<string>6549A2071003B34F007BA717</string>
 		<string>6510B22E0FF6A4EA00672B62</string>
 		<string>1CD10A99069EF8BA00B06720</string>
+		<string>1C78EAAD065D492600B07095</string>
 		<string>/Users/Tommy/Programmering/Ruby/Projekt/ItunesFeeder/ItunesFeeder.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -915,7 +917,7 @@
 			<key>WindowToolGUID</key>
 			<string>1C78EAAD065D492600B07095</string>
 			<key>WindowToolIsVisible</key>
-			<false/>
+			<true/>
 		</dict>
 		<dict>
 			<key>Identifier</key>
