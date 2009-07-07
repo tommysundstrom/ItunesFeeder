@@ -2,13 +2,15 @@
 #  Pathstring.rb
 #  ItunesFeeder
 #
-#  Created by Tommy Sundström on 25/2-09.
+#  Created by Tommy Sundstr‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ‚Äö√Ñ√∂‚àö‚Ä†‚àö√°m on 25/2-09.
 #  Copyright (c) 2009 Helt Enkelt ab. All rights reserved.
 #
 
 require 'pathname'
 require 'pp'
 require 'osx/cocoa'
+# require 'log'   WARNING since pathstring uses log, log can not be included here.
+
 
 
 # Pathstring is a replacement for Pathname, that is a subclass to string. This way we get rid of the need
@@ -20,7 +22,12 @@ require 'osx/cocoa'
 # * Some extra utility classes.
 #
 class Pathstring < String
+  #CLASSLOG = Log.new("Class: #{self.name}") # Creates a log named 'Class:' + class name + .log
+  #CLASSLOG.debug "Loaded class '#{self.name}' from '#{__FILE__}'"
+
   def initialize(path)
+    #CLASSLOG.debug "Creating '#{self.to_s} with path '#{path}'" # Use inside def initialize, to get object id
+
     # I'm not 100% about these two, so for the moment they'll have to go
     # path = File.expand_path(path) if path[0].to_s == '~' # Auto-expand ~-paths
     # path = File.expand_path(path) if path[0].to_s == '.' # Auto-expand paths anchored in present working directory
@@ -31,8 +38,8 @@ class Pathstring < String
   
   def method_missing(symbol, *args)
     result = @pathname.__send__(symbol, *args)      # BUG BUG BUG   Ibland ger pathname andra sorters svar, t.ex. sant/falsk eller en array
-          # När det inte är en Pathname objekt jag får tillbaka, måste jag släppa vidare svaret som det är (typ)
-          # Fast ev kolla på innehållet i arrayen (t.ex. när det är children, och Pathstringa dem.
+          # N‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ¬¨¬®‚àö√ºr det inte ‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ¬¨¬®‚àö√ºr en Pathname objekt jag f‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ‚Äö√Ñ√∂‚àö√ë¬¨¬¢r tillbaka, m‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ‚Äö√Ñ√∂‚àö√ë¬¨¬¢ste jag sl‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ¬¨¬®‚àö√ºppa vidare svaret som det ‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ¬¨¬®‚àö√ºr (typ)
+          # Fast ev kolla p‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ‚Äö√Ñ√∂‚àö√ë¬¨¬¢ inneh‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ‚Äö√Ñ√∂‚àö√ë¬¨¬¢llet i arrayen (t.ex. n‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ¬¨¬®‚àö√ºr det ‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ¬¨¬®‚àö√ºr children, och Pathstringa dem.
     if result.class == Pathname then
       return Pathstring.new(result)
     elsif result.class == Array  then
@@ -50,8 +57,16 @@ class Pathstring < String
   end
 
   def +(path)   # Overrides String behaviour.
+    raise "Plus is no longer used. Use slash instead."
+    # TODO Maybe make + function like a normal string plus.
+    #return Pathstring.new( (@pathname + Pathname.new(path)) )
+  end
+
+  # Slash / will add a file system node to the current path
+  def /(path)   # Overrides String behaviour.
     return Pathstring.new( (@pathname + Pathname.new(path)) )
   end
+
   
   # Differs from Pathname mkpath in that it also handles file paths
   def mkpath
@@ -59,16 +74,22 @@ class Pathstring < String
     path = path.dirname if path.file? # Make sure the directory for the file exists
     Pathname(path).mkpath
   end
+
+  # Differs from Pathname in that it will raise an error if first char of self is ~
+  def exist?
+    raise "Will not give a relevant answer for path '#{self}', since it starts with ~ and therefore by definition does not exist." if self[0..0] == '~'
+    return File.exists?(self.to_s) 
+  end
   
   
   # Added functions
     
   # Like Dir.mkdir, but without the error if a folder is already in place
   # The most common error is SystemCallError = The direcotry cannot be created
-  def ANVANDS_EJensure_directory   # ANVÄND MKPATH ISTÄLLET!!!!
-    #$log.debug "Enters ensure_directory. self: #{self}"
+  def ANVANDS_EJensure_directory   # ANV‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ‚Äö√†√∂‚àö¬¥ND MKPATH IST‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ‚Äö√†√∂‚àö¬¥LLET!!!!
+    #CLASSLOG.debug "Enters ensure_directory. self: #{self}"
     if self.exist? then 
-      #$log.debug "#{self} alredy existed"
+      #CLASSLOG.debug "#{self} alredy existed"
       return  # Directory already in place, no need to do anything.  
     end 
     self.mkdir  
@@ -105,13 +126,46 @@ class Pathstring < String
   # Can not move a directory
   ##def mv(destination)
   ##end
-  
-  # If self is a directory, adds item.
-  # If something with the same name is already present, adds a number to item and tries again, until success or to many tries.
-  def enumbered_add_to_directory(item)
-    $log.info "Renamed #{Pathstring.new(item).basename} to xxxx"
+
+
+  # Returns a path to 'name' in self. self needs to be a directory.
+  # If something with the same name is already present, adds a number to the name and tries again, until success or to many tries.
+  def next_available_path_for(basename)  # TODO Let extension be a part of the name, split with ???
+    if not self.directory? then raise "Can only add #{name} to a directory path." end
+
+    # Splitting the basename into useful parts
+    extname = File.extname(basename)  # (Includes the dot)
+    name = File.basename(basename, extname) # Removes extname from basename
+
+    new_path = self / (name + extname)
+    #OSX::NSLog "Pathstring - self: #{self}"
+    #OSX::NSLog "Pathstring - name: #{name}"
+    #OSX::NSLog "Pathstring - new_path (i pathstring) pre: #{new_path}"
+    # Check if there already is a fsitem with this path
+    if new_path.exist?
+      # Needs to change name, until I find something that is not already used
+      for n in 1..9999 do
+        new_path = self / (name + " %04d" % n + extname)   # adds for example 0012 to the name
+        #OSX::NSLog "Pathstring - new_path (i pathstring): #{new_path}"
+        #OSX::NSLog "Pathstring - n: #{n}"
+        #OSX::NSLog "Pathstring - extname: #{extname}"
+        if not new_path.exist?
+          return Pathstring(new_path) # Returns a free name
+        end
+      end
+      OSX::NSLog "Pathstring - WARNING: Unable to find a free name for '#{name}'."
+      return false
+    end
+    return Pathstring(new_path)
   end 
-  
+
+  # Adds an extension
+  def add_extension(ext)
+    return Pathstring(self.to_s + '.' + ext)  
+  end
+
+
+
   # Array of child-files and folders that to not begin their name with a dot
   def undotted_children
     self.children.reject {|t| t[0].to_s == '.' }
@@ -129,6 +183,11 @@ class Pathstring < String
   def children_except_those_beginning_with(array_of_beginnings)
     # NOT IMPLEMENTED YET self.children.select {|t| t[0].to_s != '.' }
   end
+
+  # Array of child-files and folders that to not begin their name with a dot. Simpler version than that above
+  def visible_children
+    raise "Not implemented"
+  end
   
   # Array of siblings (not including self)
   def siblings
@@ -145,11 +204,29 @@ class Pathstring < String
   # Removes the .DS_Store file - an autocreated file that just contains the visual settings 
   # for the folder - if there is one. Note that it may quickly be recreated by OSX. 
   # Mac-centric
+  # I've had a great deal of trouble getting this to work reliably. (Theory: DS_Store was somehow
+  # removed between the test and the unlinking.). But the rescue seams to fix that.
   def delete_dsstore!
-    if (self + '.DS_Store').exist? then
-      (self + '.DS_Store').delete
+    if (self / '.DS_Store').exist? then
+      # OSX::NSLog "self: #{self}"
+      # OSX::NSLog "(self / '.DS_Store').exist?: #{(self / '.DS_Store').exist?}"
+      # OSX::NSLog "(self / '.DS_Store').to_s: #{(self / '.DS_Store').to_s}"
+      begin
+        File.unlink((self / '.DS_Store').to_s)
+      rescue ArgumentError, e
+        # Just continue
+        # OSX::NSLog "Got an argument error when trying to remove the DS_Store-file"
+        # OSX::NSLog "(self / '.DS_Store').exist?: #{(self / '.DS_Store').exist?}"
+      end
     end
     return self
+  end
+
+  # For some reason, delete seams unreliable, while unlink works better. <- This may be a faulty conclusion,
+  #     drawn from the problems with DS_Store. See above.
+  def delete
+    raise "For some reason, 'delete' seams unreliable, while 'unlink' works better. So use 'unlink' (at least until
+            switching to Ruby 1.9)."
   end
   
   # Content of a directory, but with .DS_Store file excluded
@@ -180,7 +257,7 @@ class Pathstring < String
     raise 'Unable to find an application name.'
   end
   
-  # Array of the basenames of the children TROR DETTA REDAN ÄR TÄCKT AV TYP Dir*
+  # Array of the basenames of the children TROR DETTA REDAN ‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ‚Äö√†√∂‚àö¬¥R T‚Äö√Ñ√∂‚àö‚Ä†‚àö‚àÇ‚Äö√†√∂‚àö¬¥CKT AV TYP Dir*
   def children_basename
   
   end

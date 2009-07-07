@@ -1,14 +1,15 @@
-require "test/unit"
-require 'rubygems'
-require 'shoulda'
-require 'assert2'
+require 'test_setup'
 
 class Controller_preferences_Test < Test::Unit::TestCase
+  CLASSLOG = Log.new("Class: #{self.name}") # Creates a log named 'Class:' + class name
+  # .log
+  CLASSLOG.debug "Loaded class '#{self.name}' from '#{__FILE__}'"
+  CLASSLOG.debug "Creating '#{self.to_s}'" # Use inside def initialize, to get object id
 
   # Called before every test method runs. Can be used
   # to set up fixture information.
   def setup
-    # Do nothing
+    CLASSLOG.debug "Initializing #{self.to_s}."
   end
 
   # Called after every test method runs. Can be used to tear

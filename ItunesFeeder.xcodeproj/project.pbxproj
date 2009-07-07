@@ -19,8 +19,13 @@
 		6510BCD90FF6D1BC00672B62 /* test in Resources */ = {isa = PBXBuildFile; fileRef = 6510B24B0FF6D1B900672B62 /* test */; };
 		6510BCDE0FF6D1FB00672B62 /* controller.rb in Resources */ = {isa = PBXBuildFile; fileRef = 6510BCDD0FF6D1FB00672B62 /* controller.rb */; };
 		6510BD090FF7706F00672B62 /* filesystem.rb in Resources */ = {isa = PBXBuildFile; fileRef = 6510BD070FF7706F00672B62 /* filesystem.rb */; };
-		6510BD3F0FF7D37100672B62 /* controller_preferences.rb in Resources */ = {isa = PBXBuildFile; fileRef = 6510BD3D0FF7D37100672B62 /* controller_preferences.rb */; };
-		6510BD400FF7D37100672B62 /* Rakefile in Resources */ = {isa = PBXBuildFile; fileRef = 6510BD3E0FF7D37100672B62 /* Rakefile */; };
+		6510BD640FF9748500672B62 /* controller_preferences.rb in Resources */ = {isa = PBXBuildFile; fileRef = 6510BD5D0FF9748500672B62 /* controller_preferences.rb */; };
+		6510BD650FF9748500672B62 /* external_handbrake.rb in Resources */ = {isa = PBXBuildFile; fileRef = 6510BD5E0FF9748500672B62 /* external_handbrake.rb */; };
+		6510BD660FF9748500672B62 /* model_video.rb in Resources */ = {isa = PBXBuildFile; fileRef = 6510BD5F0FF9748500672B62 /* model_video.rb */; };
+		6510BD670FF9748500672B62 /* model_video_archive.rb in Resources */ = {isa = PBXBuildFile; fileRef = 6510BD600FF9748500672B62 /* model_video_archive.rb */; };
+		6510BD680FF9748500672B62 /* Rakefile in Resources */ = {isa = PBXBuildFile; fileRef = 6510BD610FF9748500672B62 /* Rakefile */; };
+		6510BD690FF9748500672B62 /* status_menu.rb in Resources */ = {isa = PBXBuildFile; fileRef = 6510BD620FF9748500672B62 /* status_menu.rb */; };
+		6510BD6A0FF9748500672B62 /* watched_folder.rb in Resources */ = {isa = PBXBuildFile; fileRef = 6510BD630FF9748500672B62 /* watched_folder.rb */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,8 +43,13 @@
 		6510B24B0FF6D1B900672B62 /* test */ = {isa = PBXFileReference; lastKnownFileType = folder; path = test; sourceTree = "<group>"; };
 		6510BCDD0FF6D1FB00672B62 /* controller.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = controller.rb; sourceTree = "<group>"; };
 		6510BD070FF7706F00672B62 /* filesystem.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = filesystem.rb; sourceTree = "<group>"; };
-		6510BD3D0FF7D37100672B62 /* controller_preferences.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = controller_preferences.rb; sourceTree = "<group>"; };
-		6510BD3E0FF7D37100672B62 /* Rakefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Rakefile; sourceTree = "<group>"; };
+		6510BD5D0FF9748500672B62 /* controller_preferences.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = controller_preferences.rb; sourceTree = "<group>"; };
+		6510BD5E0FF9748500672B62 /* external_handbrake.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = external_handbrake.rb; sourceTree = "<group>"; };
+		6510BD5F0FF9748500672B62 /* model_video.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = model_video.rb; sourceTree = "<group>"; };
+		6510BD600FF9748500672B62 /* model_video_archive.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = model_video_archive.rb; sourceTree = "<group>"; };
+		6510BD610FF9748500672B62 /* Rakefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Rakefile; sourceTree = "<group>"; };
+		6510BD620FF9748500672B62 /* status_menu.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = status_menu.rb; sourceTree = "<group>"; };
+		6510BD630FF9748500672B62 /* watched_folder.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = watched_folder.rb; sourceTree = "<group>"; };
 		E8F5E24E03AEB6EC03A81C6F /* RubyCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RubyCocoa.framework; path = /System/Library/Frameworks/RubyCocoa.framework; sourceTree = "<absolute>"; };
 		E8F5E25803AEB7C803A81C6F /* rb_main.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = rb_main.rb; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -95,6 +105,13 @@
 		29B97314FDCFA39411CA2CEA /* ItunesFeeder */ = {
 			isa = PBXGroup;
 			children = (
+				6510BD5D0FF9748500672B62 /* controller_preferences.rb */,
+				6510BD5E0FF9748500672B62 /* external_handbrake.rb */,
+				6510BD5F0FF9748500672B62 /* model_video.rb */,
+				6510BD600FF9748500672B62 /* model_video_archive.rb */,
+				6510BD610FF9748500672B62 /* Rakefile */,
+				6510BD620FF9748500672B62 /* status_menu.rb */,
+				6510BD630FF9748500672B62 /* watched_folder.rb */,
 				6510B2450FF6D1B900672B62 /* __init__.rb */,
 				6510B24B0FF6D1B900672B62 /* test */,
 				6510B2270FF6A1FB00672B62 /* English.lproj */,
@@ -120,8 +137,6 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				6510BD3D0FF7D37100672B62 /* controller_preferences.rb */,
-				6510BD3E0FF7D37100672B62 /* Rakefile */,
 				6510BD070FF7706F00672B62 /* filesystem.rb */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
@@ -201,8 +216,13 @@
 				6510BCD90FF6D1BC00672B62 /* test in Resources */,
 				6510BCDE0FF6D1FB00672B62 /* controller.rb in Resources */,
 				6510BD090FF7706F00672B62 /* filesystem.rb in Resources */,
-				6510BD3F0FF7D37100672B62 /* controller_preferences.rb in Resources */,
-				6510BD400FF7D37100672B62 /* Rakefile in Resources */,
+				6510BD640FF9748500672B62 /* controller_preferences.rb in Resources */,
+				6510BD650FF9748500672B62 /* external_handbrake.rb in Resources */,
+				6510BD660FF9748500672B62 /* model_video.rb in Resources */,
+				6510BD670FF9748500672B62 /* model_video_archive.rb in Resources */,
+				6510BD680FF9748500672B62 /* Rakefile in Resources */,
+				6510BD690FF9748500672B62 /* status_menu.rb in Resources */,
+				6510BD6A0FF9748500672B62 /* watched_folder.rb in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
