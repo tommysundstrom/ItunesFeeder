@@ -50,7 +50,7 @@ class ControllerTest < Test::Unit::TestCase
           require 'model_video_archive'
           @testdir = Pathstring('~/Programmering/Ruby/Projekt/ItunesFeeder_test/workflow').expand_path # WARNING This dir and
               # its content will be removed.
-          @examples = Pathstring(File.dirname(@testdir)) + 'examples'
+          @examples = Pathstring(File.dirname(@testdir)) / 'examples'
           @example_folder = 'controller_test_A'   
 
                   
@@ -58,7 +58,7 @@ class ControllerTest < Test::Unit::TestCase
           cleanup_and_setup_workflow_dirs(@testdir, @c.video_archive) # included from Test_helpers
 
           # Copy testfiles into place
-          example = @examples + @example_folder
+          example = @examples / @example_folder
           FileUtils.copy_entry(example, @c.video_archive.inbox, :remove_destination => true)
 
           #
@@ -67,7 +67,7 @@ class ControllerTest < Test::Unit::TestCase
         end
 
         teardown do
-          result_archive = @examples + (@example_folder.to_s + ' - result')
+          result_archive = @examples / (@example_folder.to_s + ' - result')
           FileUtils.rmtree([result_archive], {:secure=>true})
           result_archive.mkdir
           FileUtils.copy_entry(@c.video_archive.inbox.dirname, result_archive, :remove_destination => true)
@@ -87,7 +87,7 @@ class ControllerTest < Test::Unit::TestCase
           require 'model_video_archive'
           @testdir = Pathstring('~/Programmering/Ruby/Projekt/ItunesFeeder_test/workflow').expand_path # WARNING This dir and
               # its content will be removed.
-          @examples = Pathstring(File.dirname(@testdir)) + 'examples'
+          @examples = Pathstring(File.dirname(@testdir)) / 'examples'
           # @example_folder = 'duplicate file name'
 
 
@@ -95,10 +95,10 @@ class ControllerTest < Test::Unit::TestCase
           cleanup_and_setup_workflow_dirs(@testdir, @c.video_archive) # included from Test_helpers
 
           # Copy testfiles into place
-          example_inbox = @examples + 'duplicate file name' + 'in inbox'
+          example_inbox = @examples / 'duplicate file name' / 'in inbox'
           FileUtils.copy_entry(example_inbox, @c.video_archive.inbox, :remove_destination => true)
 
-          example_m4v = @examples + 'duplicate file name' + 'in m4v'
+          example_m4v = @examples / 'duplicate file name' / 'in m4v'
           FileUtils.copy_entry(example_m4v, @c.video_archive.m4ved, :remove_destination => true)
 
           #
@@ -108,7 +108,7 @@ class ControllerTest < Test::Unit::TestCase
 
         teardown do
 =begin
-          result_archive = @examples + (@example_folder.to_s + ' - result')
+          result_archive = @examples / (@example_folder.to_s + ' - result')
           FileUtils.rmtree([result_archive], {:secure=>true})
           result_archive.mkdir
           FileUtils.copy_entry(@c.video_archive.inbox.dirname, result_archive, :remove_destination => true)

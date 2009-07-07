@@ -88,7 +88,7 @@ class Video_archive_Test < Test::Unit::TestCase
       should "Setup archive directories" do
         assert_nothing_raised { @video_archive.setup_archive_directories }
         assert { @video_archive.inbox.exist? }
-        assert { @video_archive.inbox == @testdir + 'inbox' }
+        assert { @video_archive.inbox == @testdir / 'inbox' }
         assert { @video_archive.processed.exist? }
       end
 
@@ -107,7 +107,7 @@ class Video_archive_Test < Test::Unit::TestCase
 
     context "With example files - " do
       setup do
-        @examples = Pathstring(File.dirname(@testdir)) + 'examples'        
+        @examples = Pathstring(File.dirname(@testdir)) / 'examples'
       end
 
 =begin
@@ -115,12 +115,12 @@ class Video_archive_Test < Test::Unit::TestCase
         setup do
           # Copy testfiles into place
           @example_folder = 'A'
-          example = @examples + @example_folder
+          example = @examples / @example_folder
           FileUtils.copy_entry(example, @video_archive.inbox, :remove_destination => true)
         end
 
         teardown do
-          result_archive = @examples + (@example_folder.to_s + ' - result')
+          result_archive = @examples / (@example_folder.to_s + ' - result')
           FileUtils.rmtree([result_archive], {:secure=>true})
           result_archive.mkdir
           FileUtils.copy_entry(@video_archive.inbox.dirname, result_archive, :remove_destination => true)
@@ -145,7 +145,7 @@ class Video_archive_Test < Test::Unit::TestCase
           end
           
           should "Handle when Handbrake fails with a file." do
-            assert { (@video_archive.failed + 'Dummy.Sons.of.Anarchy.S01E13.The.Revelator.HDTV.XviD-FQM.avi').exist? } 
+            assert { (@video_archive.failed / 'Dummy.Sons.of.Anarchy.S01E13.The.Revelator.HDTV.XviD-FQM.avi').exist? }
           end
         end
       end
@@ -155,12 +155,12 @@ class Video_archive_Test < Test::Unit::TestCase
         setup do
           # Copy testfiles into place
           @example_folder = 'avi'
-          example = @examples + @example_folder
+          example = @examples / @example_folder
           FileUtils.copy_entry(example, @video_archive.inbox, :remove_destination => true)
         end
 
         teardown do
-          result_archive = @examples + (@example_folder.to_s + ' - result')
+          result_archive = @examples / (@example_folder.to_s + ' - result')
           FileUtils.rmtree([result_archive], {:secure=>true})
           result_archive.mkdir
           FileUtils.copy_entry(@video_archive.inbox.dirname, result_archive, :remove_destination => true)
@@ -185,11 +185,11 @@ class Video_archive_Test < Test::Unit::TestCase
           end
 
           should "Convert the file to m4v." do
-            assert { (@video_archive.m4ved + 'avi-Helgmalsringning.m4v').exist? }
+            assert { (@video_archive.m4ved / 'avi-Helgmalsringning.m4v').exist? }
           end
 
           should "Move the original to the processed folder" do
-            assert { (@video_archive.originals + 'avi-Helgmalsringning.avi').exist? }            
+            assert { (@video_archive.originals / 'avi-Helgmalsringning.avi').exist? }
           end
         end
       end

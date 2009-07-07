@@ -20,7 +20,7 @@ class Preferences < OSX::NSObject
     @defaults = OSX::NSUserDefaults.standardUserDefaults
     register_defaults_for_inbox('~/Movies/iTunes-inbox')   # Note: The directory for the box
           # will not be created until the program is actually run, so the user can change inbox location in the preferences.
-    register_defaults_for_processed( Pathstring.new(@defaults.objectForKey(:inbox)).parent + 'iTunes-processed' ) # This is the location
+    register_defaults_for_processed( Pathstring.new(@defaults.objectForKey(:inbox)).parent / 'iTunes-processed' ) # This is the location
           # of directories for files that has been processed, converted, failed, etc. Must be on the same volume!
 
     return self

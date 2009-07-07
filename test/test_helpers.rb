@@ -42,7 +42,7 @@ module Test_helpers
       video_archive.set_workflow_paths(testdir) # paths
       video_archive.setup_archive_directories    # actual dir creation
       #@video_archive.set_processed = testdir
-      #@video_archive.inbox = testdir + 'inbox'
+      #@video_archive.inbox = testdir / 'inbox'
     end
   end
 end

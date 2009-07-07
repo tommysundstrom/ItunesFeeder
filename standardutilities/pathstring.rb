@@ -57,10 +57,16 @@ class Pathstring < String
   end
 
   def +(path)   # Overrides String behaviour.
+    raise "Plus is no longer used. Use slash instead."
+    # TODO Maybe make + function like a normal string plus.
+    #return Pathstring.new( (@pathname + Pathname.new(path)) )
+  end
+
+  # Slash / will add a file system node to the current path
+  def /(path)   # Overrides String behaviour.
     return Pathstring.new( (@pathname + Pathname.new(path)) )
   end
 
-  
   
   # Differs from Pathname mkpath in that it also handles file paths
   def mkpath
@@ -131,7 +137,7 @@ class Pathstring < String
     extname = File.extname(basename)  # (Includes the dot)
     name = File.basename(basename, extname) # Removes extname from basename
 
-    new_path = self + (name + extname)
+    new_path = self / (name + extname)
     #OSX::NSLog "Pathstring - self: #{self}"
     #OSX::NSLog "Pathstring - name: #{name}"
     #OSX::NSLog "Pathstring - new_path (i pathstring) pre: #{new_path}"
@@ -139,7 +145,7 @@ class Pathstring < String
     if new_path.exist?
       # Needs to change name, until I find something that is not already used
       for n in 1..9999 do
-        new_path = self + (name + " %04d" % n + extname)   # adds for example 0012 to the name
+        new_path = self / (name + " %04d" % n + extname)   # adds for example 0012 to the name
         #OSX::NSLog "Pathstring - new_path (i pathstring): #{new_path}"
         #OSX::NSLog "Pathstring - n: #{n}"
         #OSX::NSLog "Pathstring - extname: #{extname}"
@@ -201,16 +207,16 @@ class Pathstring < String
   # I've had a great deal of trouble getting this to work reliably. (Theory: DS_Store was somehow
   # removed between the test and the unlinking.). But the rescue seams to fix that.
   def delete_dsstore!
-    if (self + '.DS_Store').exist? then
+    if (self / '.DS_Store').exist? then
       # OSX::NSLog "self: #{self}"
-      # OSX::NSLog "(self + '.DS_Store').exist?: #{(self + '.DS_Store').exist?}"
-      # OSX::NSLog "(self + '.DS_Store').to_s: #{(self + '.DS_Store').to_s}"
+      # OSX::NSLog "(self / '.DS_Store').exist?: #{(self / '.DS_Store').exist?}"
+      # OSX::NSLog "(self / '.DS_Store').to_s: #{(self / '.DS_Store').to_s}"
       begin
-        File.unlink((self + '.DS_Store').to_s)
+        File.unlink((self / '.DS_Store').to_s)
       rescue ArgumentError, e
         # Just continue
         # OSX::NSLog "Got an argument error when trying to remove the DS_Store-file"
-        # OSX::NSLog "(self + '.DS_Store').exist?: #{(self + '.DS_Store').exist?}"
+        # OSX::NSLog "(self / '.DS_Store').exist?: #{(self / '.DS_Store').exist?}"
       end
     end
     return self

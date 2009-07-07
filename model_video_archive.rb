@@ -53,17 +53,17 @@ class Video_archive
       #   (That way I belive they may be persistent???)
       @processed  = Pathstring.new(processed_path)
       #@current    = @processed + 'current'    # Normaly just contains max one file or directory - the one currently being worked on
-      @originals  = @processed + '_originals'  # TODO: Option to move to Trash + option to delete directly
-      @unsupported = @originals + '_unsupported'
-      @failed     = @originals + '_failed'     # Directory to put the files Handbrake could not do anything about in
-      @m4ved      = @processed + '_m4ved'      # Directory to take the files Handbrake creates.
+      @originals  = @processed / '_originals'  # TODO: Option to move to Trash + option to delete directly
+      @unsupported = @originals / '_unsupported'
+      @failed     = @originals / '_failed'     # Directory to put the files Handbrake could not do anything about in
+      @m4ved      = @processed / '_m4ved'      # Directory to take the files Handbrake creates.
     end
 
     def set_workflow_paths(path)   # Utilities method that points to a root workflow/'ItunesFeeder' dir, and inside that
             # an inbox and a processed dir.
       path = Pathstring(path)
-      set_inbox(path + 'inbox')
-      set_processed_and_subfolders(path + 'processed')
+      set_inbox(path / 'inbox')
+      set_processed_and_subfolders(path / 'processed')
     end
   end
 
@@ -203,7 +203,7 @@ class Video_archive
             # both places.
       basename = @m4ved.next_available_path_for(video.prefered_name + @extension).basename
       #basename = available_path_for(video).add_extension('m4v').basename
-      m4v_video = Handbrake::feed_me(video, @m4ved + basename)
+      m4v_video = Handbrake::feed_me(video, @m4ved / basename)
       if m4v_video then
         video.move_me(@originals) # Move the processed file.
         # Todo TILLFALLIGT BORTKOPPLAD   m4v_video.add_me_to_iTunes
@@ -227,14 +227,14 @@ class Video_archive
     def failed_handler(inp, reason)
       CLASSLOG.info "Failed to do anything with #{inp.basename}, except moving it to #{@failed}"
       CLASSLOG.info "This is why: #{reason}"
-      FileUtils.move(inp, @unsupported + inp.basename) # TODO: Handle overwrites
+      FileUtils.move(inp, @unsupported / inp.basename) # TODO: Handle overwrites
     end
   end
 
 
 def available_path_for(video)        # DET HÄR ÄR HELT UPPFUCKAT VÄL OM JAG INTE FÅR MED EXTENSIONEN I JÄMFÖRELSEN??
    out_path = Pathstring(processed).next_available_path_for(video.prefered_name)
-  #out_path = Pathstring.new(converted) + (video.prefered_name + ".m4v")
+  #out_path = Pathstring.new(converted) / (video.prefered_name + ".m4v")
   if out_path === false
     CLASSLOG.error "Unable to find a free name for '#{video.prefered_name}' in '#{processed}'."
     return false  # I.e the video file will be moved away and we can continue with next.

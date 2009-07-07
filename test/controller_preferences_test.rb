@@ -1,7 +1,8 @@
 require 'test_setup'
 
 class Controller_preferences_Test < Test::Unit::TestCase
-  CLASSLOG = Log.new("Class: #{self.name}") # Creates a log named 'Class:' + class name + .log
+  CLASSLOG = Log.new("Class: #{self.name}") # Creates a log named 'Class:' + class name
+  # .log
   CLASSLOG.debug "Loaded class '#{self.name}' from '#{__FILE__}'"
   CLASSLOG.debug "Creating '#{self.to_s}'" # Use inside def initialize, to get object id
 
