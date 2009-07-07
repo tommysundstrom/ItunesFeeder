@@ -67,7 +67,7 @@ class ControllerTest < Test::Unit::TestCase
         end
 
         teardown do
-          result_archive = @examples / (@example_folder.to_s + ' - result')
+          result_archive = @examples / (@example_folder.to_s + ' - result')    
           FileUtils.rmtree([result_archive], {:secure=>true})
           result_archive.mkdir
           FileUtils.copy_entry(@c.video_archive.inbox.dirname, result_archive, :remove_destination => true)
