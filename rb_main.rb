@@ -8,7 +8,7 @@
 
 require 'osx/cocoa'
 require '../require_app_files'
-require 'pp' # TEST
+require 'pp' # TEST  
 
 def rb_main_init
   OSX::NSLog "rb_main_init" # TEST

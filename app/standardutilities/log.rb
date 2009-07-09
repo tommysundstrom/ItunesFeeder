@@ -12,35 +12,35 @@ require 'log4r'
 
 
 # When this source file is loaded, it cleans out old logs.
-  def clean_out_log_directory(dir)
-   Pathstring(dir).children.each do |item|
-     if item.directory?
-       # First clean out inside the directory
-       clean_out_log_directory(item)
+def clean_out_log_directory(dir)
+  Pathstring(dir).children.each do |item|
+    if item.directory?
+      # First clean out inside the directory
+      clean_out_log_directory(item)
 
-       # Then, if it is empty, delete it
-       if item.empty?
-         # OSX::NSLog "Removing directory: #{file.basename}"
-         item.unlink
-       end
-     else # Not a directory, so a normal file
-       unless Pathstring(item).basename.scan(/rolling/)[0] # Note: This depends on the convention to include 'rolling' in the name of persistent files. TODO: Remove older rolling logs.
+      # Then, if it is empty, delete it
+      if item.empty?
+        # OSX::NSLog "Removing directory: #{file.basename}"
+        item.unlink
+      end
+    else # Not a directory, so a normal file
+      unless Pathstring(item).basename.scan(/rolling/)[0] # Note: This depends on the convention to include 'rolling' in the name of persistent files. TODO: Remove older rolling logs.
          # If it is not a persistent log
          #   remove it
          # OSX::NSLog "Removing log: #{item.basename}"
          item.unlink
-       end
-     end
-   end
- end
+      end
+    end
+  end
+end
 
 
-  app_name = Pathstring.new(__FILE__).application_name  # Code here is same as used inside class
-  log_directory = Pathstring("~/Library/Logs/Ruby/#{app_name}").expand_path
-  log_directory.mkpath # Makes sure the path exists
-  
-  logdir = Pathstring(log_directory)
-  clean_out_log_directory(logdir)
+app_name = Pathstring.new(__FILE__).application_name  # Code here is same as used inside class
+log_directory = Pathstring("~/Library/Logs/Ruby/#{app_name}").expand_path
+log_directory.mkpath # Makes sure the path exists
+
+logdir = Pathstring(log_directory)
+clean_out_log_directory(logdir)
 
 
 # Log
@@ -71,6 +71,11 @@ class Log #< OSX::NSObject
     
   # Class variables
     @@logs = {}
+
+  # Class methods
+  def Log.classlog(classref)
+    return Log.new("Class: #{classref.name}") # Creates a log named 'Class:' + class name + .log
+  end
   
   
 
