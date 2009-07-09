@@ -56,6 +56,7 @@ def add_to_load_path_if_has_init(context_dir)
     # TODO: Check for a 'special' method in it, that can be used to adjust the handling
 
     $LOAD_PATH << context_dir
+    OSX::NSLog "Added '#{context_dir}' to $LOAD_PATH"
 
     # Recursively do the same with sub-folders
     Dir.entries(context_dir).select do |basename|
@@ -78,15 +79,18 @@ def require_if_in_dir_with_init(context_dir)
 
     # Require all .rb-files, except __init__.rb and rb_main.rb (ie this file)
     rbfiles = Dir.entries(context_dir).select {|x| /\.rb\z/ =~ x}
-    OSX::NSLog "All rbfiles in '#{context_dir}':"
-    rbfiles.each {|item| OSX::NSLog item}
+    #OSX::NSLog "All rbfiles in '#{context_dir}':"
+    #rbfiles.each {|item| OSX::NSLog item}
     rbfiles -= [ '__init__.rb' ] # Ignore any file named '__init__.rb'
     rbfiles -= [ File.basename(__FILE__) ] # Ignore any file named 'rb_main.rb'
+    # TODO: IMPORTANT: Must change working dir. (Remember it and restore it at root level.)
+    # CORRECTION As long as every dir is added to LOAD_PATH it is not needed.
     rbfiles.each do |basename|
-      OSX::NSLog "controller.rb spotted" if basename == 'controller.rb'
-      require( File.basename(basename, '.rb')) # requires file name, without rb extension. (This is the most usual
+      result = require( File.basename(basename, '.rb')) # requires file name, without rb extension. (This is the most usual
             # way to require, so I do this in order to avoid double-requirements.)
+      OSX::NSLog "Required '#{basename}'#{if result == false then ' but it had apperently already been required' end}."
     end
+    OSX::NSLog "rb-files inside '#{context_dir}' required."
 
 
     # Recursively do the same with sub-folders
