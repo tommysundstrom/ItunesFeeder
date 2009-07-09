@@ -3,12 +3,12 @@ require 'rake'
 require 'rake/testtask'
 
 # Some paths, etc.
-Me = File.expand_path(__FILE__)
-Test_root = File.dirname(Me)
-App_root = File.dirname(Test_root) # (Note: This way to find root is not safe inside the application,
+ME = File.expand_path(__FILE__)
+TEST_ROOT = File.dirname(ME)
+App_root = File.dirname(TEST_ROOT) # (Note: This way to find root is not safe inside the application,
       # but here in test it's ok)
 Standardutilities_root = File.join(App_root, 'standardutilities')
-Sandbox = File.join(Test_root, 'sandbox')
+Sandbox = File.join(TEST_ROOT, 'sandbox')
 
 # Set up paths
 #   For gems in sandbox

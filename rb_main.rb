@@ -7,8 +7,8 @@
 #
 
 require 'osx/cocoa'
+require 'require_app_files'
 require 'pp' # TEST
-# OSX::NSLog "Running rb_main.rb"
 
 def rb_main_init
   OSX::NSLog "rb_main_init" # TEST
@@ -25,82 +25,17 @@ def rb_main_init
   end
 =end
 
-  rb_main_tommys_extra_init
-end
 
-def rb_main_tommys_extra_init
-  OSX::NSLog "Orignal rb_main.rb extended with some additons by Tommy"  
+  # OSX::NSLog "Orignal rb_main.rb extended with some additons by Tommy"
 
   # Require and load files Python init-style
+  context = __FILE__
   #context = OSX::NSBundle.mainBundle.resourcePath.fileSystemRepresentation # The resource dir of the app. (This
         # is always (?) the dir where this file (rb_main.rb) is.)
-  #context_dir =  context # File.dirname(context)
-  context = __FILE__
-  context_dir = File.dirname(context)
-  OSX::NSLog "context: #{context}"
 
-  add_to_load_path_if_has_init(context_dir) 
-  require_if_in_dir_with_init(context_dir)
-end
-
-# Recursivly processes the init files - first pass, add all dirs with __init__ to the load_path
-#
-# For the moment, the existence of a init-file adds the dir to load-path and makes all the rb-files to be required.
-# First pass should handle load_path, second requirement).
-def add_to_load_path_if_has_init(context_dir)
-  raise "'#{context_dir}' does not seam to exist." unless File.exist?(context_dir)
-  raise "Must be a directory." unless File.directory?(context_dir)
-
-  if File.exist?(context_dir + '/__init__.rb')
-    # There is a __init__.rb file in this directory.
-    # TODO: Check for a 'special' method in it, that can be used to adjust the handling
-
-    $LOAD_PATH << context_dir
-    OSX::NSLog "Added '#{context_dir}' to $LOAD_PATH"
-
-    # Recursively do the same with sub-folders
-    Dir.entries(context_dir).select do |basename|
-      basename[0..0] != '.' and File.directory?(File.join(context_dir, basename))
-    end.each do |dir| # i.e. for each directory in context_dir
-      path = File.join(context_dir, dir)
-      add_to_load_path_if_has_init(path)
-    end
-  end
-end
-
-# Recursively process init files - second pass, require rb files
-def require_if_in_dir_with_init(context_dir)
-  raise "'#{context_dir}' does not seam to exist." unless File.exist?(context_dir)
-  raise "Must be a directory." unless File.directory?(context_dir)
-
-  if File.exist?(context_dir + '/__init__.rb')
-    # There is a __init__.rb file in this directory.
-    # TODO: Check for a 'special' method in it, that can be used to adjust the handling
-
-    # Require all .rb-files, except __init__.rb and rb_main.rb (ie this file)
-    rbfiles = Dir.entries(context_dir).select {|x| /\.rb\z/ =~ x}
-    #OSX::NSLog "All rbfiles in '#{context_dir}':"
-    #rbfiles.each {|item| OSX::NSLog item}
-    rbfiles -= [ '__init__.rb' ] # Ignore any file named '__init__.rb'
-    rbfiles -= [ File.basename(__FILE__) ] # Ignore any file named 'rb_main.rb'
-    # TODO: IMPORTANT: Must change working dir. (Remember it and restore it at root level.)
-    # CORRECTION As long as every dir is added to LOAD_PATH it is not needed.
-    rbfiles.each do |basename|
-      result = require( File.basename(basename, '.rb')) # requires file name, without rb extension. (This is the most usual
-            # way to require, so I do this in order to avoid double-requirements.)
-      OSX::NSLog "Required '#{basename}'#{if result == false then ' but it had apperently already been required' end}."
-    end
-    OSX::NSLog "rb-files inside '#{context_dir}' required."  
-
-
-    # Recursively do the same with sub-folders
-    Dir.entries(context_dir).select do |basename|
-      basename[0..0] != '.' and File.directory?(File.join(context_dir, basename))
-    end.each do |dir| # i.e. for each directory in context_dir
-      path = File.join(context_dir, dir)
-      require_if_in_dir_with_init(path)
-    end
-  end
+  app_root = Require_app_files::application_files_directory(File.dirname(context))
+  Require_app_files::add_to_load_path_if_has_init(app_root)
+  Require_app_files::require_if_in_dir_with_init(app_root)
 end
 
 if $0 == __FILE__ then

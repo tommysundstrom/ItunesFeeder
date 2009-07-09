@@ -1,0 +1,2 @@
+Somewhere Xcode has a memory of the standardutilities directory in this position, so it refuses to build unless there
+is one. (Strangely enough, it's not visible, nor possible to add to Xcode).
