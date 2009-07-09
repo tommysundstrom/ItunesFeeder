@@ -39,7 +39,7 @@ def rb_main_tommys_extra_init
   context_dir = File.dirname(context)
   OSX::NSLog "context: #{context}"
 
-  add_to_load_path_if_has_init(context_dir)
+  add_to_load_path_if_has_init(context_dir) 
   require_if_in_dir_with_init(context_dir)
 end
 
