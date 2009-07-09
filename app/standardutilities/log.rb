@@ -74,7 +74,10 @@ class Log #< OSX::NSObject
 
   # Class methods
   def Log.classlog(classref)
-    return Log.new("Class: #{classref.name}") # Creates a log named 'Class:' + class name + .log
+    log = Log.new("Class: #{classref.name}") # Creates a log named 'Class:' + class name + .log
+    log.debug "Loaded class '#{classref.name}' " # from '#{classref.__FILE__}'"
+    return log
+    # There is also an instance method, init, to be used in the initialize method of the class.
   end
   
   
@@ -153,7 +156,11 @@ class Log #< OSX::NSObject
       return outputter
     end
       
-  
+  # Helper functions to be used with a classlog, (first) in the initialize method.
+  def init(obj)
+    @@logs[@logname].debug "Creating '#{obj.to_s}'." # Use inside def initialize, to get object id
+  end
+
   # Helper for Level-methods
   def Log.ensure_default_log
     Log.new(:default) unless @@logs.has_key?(:default)

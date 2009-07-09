@@ -6,11 +6,13 @@ require 'preferences'
 
 class Controller < OSX::NSObject
   include OSX
+  CLASSLOG = Log.classlog(self)
 
   attr_reader :video_archive
 
   def init
     super_init
+    CLASSLOG.init(self)
     @rblog = Log.new(__FILE__)
     @rblog.debug "Initializing #{self.to_s}."
 
@@ -24,7 +26,7 @@ class Controller < OSX::NSObject
   end
 
   def awakeFromNib # Note: this is called also when the interface is defined from a Xib (xml version of nib)
-    @rblog.info "---------- New session - awaken from nib/xib ----------"
+    CLASSLOG.info "---------- New session - awaken from nib/xib ----------"
     NSLog 'Awaken from Nib'    # Test
 
     ## @status_menu.setup_status_menu(self)    # Crashes when menu is used
@@ -35,7 +37,7 @@ class Controller < OSX::NSObject
   end
 
   def setup_status_menu   # I've tried to move this to a separate class, but it just crashes, so I'll keep it here.
-    @rblog.debug "Enter setup_status_menu"
+    CLASSLOG.debug "Enter setup_status_menu"
     statusbar = NSStatusBar.systemStatusBar
     status_item = statusbar.statusItemWithLength(NSVariableStatusItemLength)
     image_name = NSBundle.mainBundle.pathForResource_ofType('stretch', 'tiff')
@@ -62,27 +64,27 @@ class Controller < OSX::NSObject
     #menu_item.setKeyEquivalentModifierMask(NSCommandKeyMask)
     menu_item.setTarget(NSApp)
 
-    @rblog.info("Added status menu")
+    CLASSLOG.info("Added status menu")
   end
 
   def empty_inbox_once(sender)
-    @rblog.debug "Started by #{sender} choosing empty_inbox_once"
+    CLASSLOG.debug "Started by #{sender} choosing empty_inbox_once"
 
     @video_archive.empty_inbox
-    @rblog.debug "Exits 'empty_inbox_once'"
+    CLASSLOG.debug "Exits 'empty_inbox_once'"
   end
 
   def test(sender)
-    @rblog.debug "Enters and exits test"
+    CLASSLOG.debug "Enters and exits test"
   end
 
   def watch_inbox(sender)
     OSX::NSLog "Now watching inbox '#{@video_archive.inbox}'."
     Log.info "Watching inbox"
-    @rblog.debug "Started by #{sender}"
+    CLASSLOG.debug "Started by #{sender}"
     # TODO A better way to loop: http://www.rubyinside.com/robustthread-for-safer-ruby-daemons-1948.html
     while true do
-      @rblog.debug "Checking the inbox"
+      CLASSLOG.debug "Checking the inbox"
       @video_archive.empty_inbox
       sleep 5 #60*10 # 10 minutes <- Should be a preference
     end
