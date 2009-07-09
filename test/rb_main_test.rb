@@ -10,7 +10,7 @@ class Rb_main_Test < Test::Unit::TestCase
   # Called before every test method runs. Can be used
   # to set up fixture information.
   def setup
-    # Do nothing
+    $LOAD_PATH << File.dirname(File.dirname(__FILE__))  # Since rb_main is located outside the application dir
   end
 
   # Called after every test method runs. Can be used to tear
