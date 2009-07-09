@@ -71,7 +71,6 @@
 			isa = PBXGroup;
 			children = (
 				6510B2460FF6D1B900672B62 /* standardutilities */,
-				6510BCDD0FF6D1FB00672B62 /* controller.rb */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -105,6 +104,7 @@
 		29B97314FDCFA39411CA2CEA /* ItunesFeeder */ = {
 			isa = PBXGroup;
 			children = (
+				6510BCDD0FF6D1FB00672B62 /* controller.rb */,
 				6510BD5D0FF9748500672B62 /* controller_preferences.rb */,
 				6510BD5E0FF9748500672B62 /* external_handbrake.rb */,
 				6510BD5F0FF9748500672B62 /* model_video.rb */,
