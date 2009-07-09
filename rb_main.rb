@@ -7,7 +7,7 @@
 #
 
 require 'osx/cocoa'
-require 'require_app_files'
+require '../require_app_files'
 require 'pp' # TEST
 
 def rb_main_init

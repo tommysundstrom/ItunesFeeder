@@ -22,7 +22,7 @@ class Rb_main_Test < Test::Unit::TestCase
 
   context "rb_main.rb - " do
     setup do
-      require 'rb_main'      
+      require '../rb_main'      
     end
     should "Dummytest" do
     end
