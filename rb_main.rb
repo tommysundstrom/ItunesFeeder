@@ -90,7 +90,7 @@ def require_if_in_dir_with_init(context_dir)
             # way to require, so I do this in order to avoid double-requirements.)
       OSX::NSLog "Required '#{basename}'#{if result == false then ' but it had apperently already been required' end}."
     end
-    OSX::NSLog "rb-files inside '#{context_dir}' required."
+    OSX::NSLog "rb-files inside '#{context_dir}' required."  
 
 
     # Recursively do the same with sub-folders
