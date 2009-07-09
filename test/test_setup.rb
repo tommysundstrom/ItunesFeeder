@@ -1,13 +1,14 @@
 require 'rubygems'
 
 # Some paths, etc.
-ME = File.expand_path(__FILE__)
-TEST_ROOT = File.dirname(ME)
-TOP_DIR = File.dirname(TEST_ROOT) # (Note: This way to
+me = File.expand_path(__FILE__)
+test_root = File.dirname(me)
+top_dir = File.dirname(test_root) # (Note: This way to
       # find root is not safe inside the application, but here in test it's ok)
-require File.join(TOP_DIR, 'require_app_files.rb')  # The module that handles application file loading
-app_root = Require_app_files::application_files_directory(TOP_DIR)
+require File.join(top_dir, 'require_app_files.rb')  # The module that handles application file loading
+app_root = Require_app_files::application_files_directory(top_dir)
 Require_app_files::add_to_load_path_if_has_init(app_root)
+Require_app_files::require_standardutilities
 Require_app_files::require_if_in_dir_with_init(app_root)
 
 
@@ -29,11 +30,11 @@ end
 
 # Set up paths
 #   For stuff in sandbox
-Sandbox = File.join(TEST_ROOT, 'sandbox')
-new_gem_path = Gem.path + [Sandbox]
+sandbox = File.join(test_root, 'sandbox')
+new_gem_path = Gem.path + [sandbox]
 Gem.use_paths(nil, new_gem_path)
 #   For stuff in sandbox lib
-$LOAD_PATH << File.join(Sandbox, 'lib')
+$LOAD_PATH << File.join(sandbox, 'lib')
 #   For other stuff
 $: << '.'  # To load files like 'test/util'
 

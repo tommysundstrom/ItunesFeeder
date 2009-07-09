@@ -1,9 +1,9 @@
 require 'test_setup'
 
 require 'fileutils'
-require 'model_video_archive'
-require 'controller_preferences'
-require 'log'
+#require 'model_video_archive'
+#require 'controller_preferences'
+#require 'log'
 require 'test_helpers'
 
 class Video_archive_Test < Test::Unit::TestCase
@@ -29,7 +29,7 @@ class Video_archive_Test < Test::Unit::TestCase
   end
 
 
-  context "model_video_archive.rb - " do
+  context "video_archive.rb - " do
     should "Initialize" do
       assert_nothing_raised { Video_archive.new(Preferences.new) }
     end

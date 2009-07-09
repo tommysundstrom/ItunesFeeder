@@ -35,6 +35,7 @@ def rb_main_init
 
   app_root = Require_app_files::application_files_directory(File.dirname(context))
   Require_app_files::add_to_load_path_if_has_init(app_root)
+  Require_app_files::require_standardutilities
   Require_app_files::require_if_in_dir_with_init(app_root)
 end
 

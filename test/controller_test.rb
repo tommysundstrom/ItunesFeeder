@@ -47,7 +47,7 @@ class ControllerTest < Test::Unit::TestCase
 
       context "With content in inbox - " do
         setup do
-          require 'model_video_archive'
+          #require 'model_video_archive'
           @testdir = Pathstring('~/Programmering/Ruby/Projekt/ItunesFeeder_test/workflow').expand_path # WARNING This dir and
               # its content will be removed.
           @examples = Pathstring(File.dirname(@testdir)) / 'examples'
@@ -84,7 +84,7 @@ class ControllerTest < Test::Unit::TestCase
 
       context "With conflikting content in inbox - " do
         setup do
-          require 'model_video_archive'
+          #require 'model_video_archive'
           @testdir = Pathstring('~/Programmering/Ruby/Projekt/ItunesFeeder_test/workflow').expand_path # WARNING This dir and
               # its content will be removed.
           @examples = Pathstring(File.dirname(@testdir)) / 'examples'

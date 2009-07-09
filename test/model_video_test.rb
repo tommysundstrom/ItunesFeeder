@@ -1,16 +1,16 @@
 require 'test_setup'
 
 require 'fileutils'
-require 'model_video_archive'
-require 'controller_preferences'
-require 'log'
+#require 'model_video_archive'
+#require 'controller_preferences'
+#require 'log'
 
 class Model_video_Test < Test::Unit::TestCase
   CLASSLOG = Log.new("Class: #{self.name}") # Creates a log named 'Class:' + class name + .log
   CLASSLOG.debug "Loaded class '#{self.name}' from '#{__FILE__}'"
 
   def setup
-    require 'model_video'
+    #require 'model_video'
     CLASSLOG.debug "Running #{self.to_s}."
   end
 
@@ -21,7 +21,7 @@ class Model_video_Test < Test::Unit::TestCase
     # Do nothing
   end
 
-  context "model_video.rb - " do
+  context "video.rb - " do
     should_eventually "Initialize" do
       assert_nothing_raised { Video.new(file) }
     end

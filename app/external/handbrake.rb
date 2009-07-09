@@ -41,10 +41,10 @@ class Handbrake
 
       # First of all, check that there now is a file at converted_path
       if not converted_path.exist?
-        CLASSLOG.warning "Handbrake failed to convert '#{video.file}' into '#{converted_path}'."
-        CLASSLOG.warning "--- This is what Handbrake reported: ---"
-        lines.each {|line| CLASSLOG.warning line}
-        CLASSLOG.warning "----------------------------------------"
+        CLASSLOG.warn "Handbrake failed to convert '#{video.file}' into '#{converted_path}'."
+        CLASSLOG.warn "--- This is what Handbrake reported: ---"
+        lines.each {|line| CLASSLOG.warn line}
+        CLASSLOG.warn "----------------------------------------"
         return false
       else
         # An output file has been created. But still need to check Handbrake output.

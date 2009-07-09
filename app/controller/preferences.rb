@@ -1,5 +1,5 @@
 #
-#  controller_preferences.rb
+#  preferences.rb
 #  ItunesFeeder
 #
 #  Created by Tommy Sundstršm on 25/2-09.
@@ -7,7 +7,7 @@
 #
 
 require 'osx/cocoa'
-require 'pathstring'
+
 
 class Preferences < OSX::NSObject
   CLASSLOG = Log.new("Class: #{self.name}") # Creates a log named 'Class:' + class name + .log

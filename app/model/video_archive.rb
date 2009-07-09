@@ -8,8 +8,8 @@
 
 require 'pathstring'
 require 'fileutils'
-require 'external_handbrake'
-require 'model_video'
+#require 'external_handbrake'
+#require 'model_video'
 require 'osx/cocoa'
 
 # A video_archive is a collection of videos (and some other files)

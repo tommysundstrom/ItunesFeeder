@@ -1,6 +1,7 @@
 # Adds dirs with __init__ to $LOAD_PATH, and requires the files in them.
 
 require 'osx/cocoa'
+require 'rubygems'  # (not used here, but will probably come in useful in a lot of places.
 
 #OSX::NSLog "require_app_files loaded" # TEST
 
@@ -22,7 +23,6 @@ module Require_app_files
       OSX::NSLog "Assuming that all application files are placed in the same dir as rb_main.rb"
       return top_dir
     end
-
   end
 
   # Recursivly processes the init files - first pass, add all dirs with __init__ to the load_path
@@ -50,6 +50,13 @@ module Require_app_files
     end
   end
 
+  # Requires standardutilites (so that ordinary rb files does not have to think about requiering them)
+  def Require_app_files.require_standardutilities
+    # Assuming that 'add_to_load_path_if_has_init' has been runned
+    require 'log'
+    require 'pathstring'
+  end
+  
   # Recursively process init files - second pass, require rb files
   def Require_app_files.require_if_in_dir_with_init(context_dir)
     raise "'#{context_dir}' does not seam to exist." unless File.exist?(context_dir)
@@ -71,7 +78,7 @@ module Require_app_files
       rbfiles.each do |basename|
         result = require( File.basename(basename, '.rb')) # requires file name, without rb extension. (This is the most usual
               # way to require, so I do this in order to avoid double-requirements.)
-        OSX::NSLog "  Required '#{basename}'#{if result == false then ' (but it had apparently already been required)' end}."
+        # OSX::NSLog "  Required '#{basename}'#{if result == false then ' (but it had apparently already been required)' end}."
       end
       # OSX::NSLog '---'
 

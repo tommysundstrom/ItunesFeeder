@@ -1,7 +1,7 @@
 require 'osx/cocoa'
 require 'log'
-require 'controller_preferences'
-require 'model_video_archive'
+require 'preferences'
+#require 'model_video_archive'
 
 
 class Controller < OSX::NSObject

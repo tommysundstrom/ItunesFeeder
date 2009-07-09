@@ -19,9 +19,9 @@ class Controller_preferences_Test < Test::Unit::TestCase
     # Do nothing
   end
 
-  context "controller_preferences.rb - " do
+  context "preferences.rb - " do
     setup do
-      require 'controller_preferences'
+      #require 'controller_preferences'
     end
 
     should "Initialize" do
