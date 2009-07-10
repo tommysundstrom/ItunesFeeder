@@ -10,6 +10,7 @@ require 'pathstring'
 require 'rubygems'
 require 'log4r'
 ###require 'log4r/outputter/syslogoutputter'
+require 'log4r/outputter/emailoutputter'
 
 # I've tried using the SyslogOutputter, but there is to many strange effects from it. Instead I've worked around it
 # by using OSX::NSLog
@@ -139,7 +140,18 @@ class Log #< OSX::NSObject
     #  log.outputters << Outputter.stdout 
     
     # Save in class repository
-      @@logs[@logname] = log   
+    @@logs[@logname] = log   
+  end
+
+  # Adds email to a log
+  def add_email_log
+    @@logs[@logname].outputters << EmailOutputter.new('email_out',    # TODO (8) Make GUI for these prefs
+                     :server=>'heltenkelt.se',
+                     :port=>25,
+                     :domain=>'heltenkelt.se',
+                     :from=>'itunesfeeder@heltenkelt.se',
+                     :to=>'tommy@heltenkelt.se',
+                     :subject=>'Report from iTunesFeeder')
   end
   
   def setup_default
@@ -183,7 +195,15 @@ class Log #< OSX::NSObject
     #outputter = FileOutputter.new("output_all#{id}", :filename => (log_path).to_s, :formatter => @@formatter)
     return outputters
   end
-      
+
+  # Flushes all outputters (most important for the email outputter, but it does not hurt the other ones.
+  # Class method (have not method for flushing individual log instances.
+  # ATT GÖRA : FLUSHA I SLUTET AV PROCESSA INBOX (OM DET VARIT NÅGOT DÄR)
+  # OCH LÄGG TILL EMAILLOGGEN PÅ NÅGON LOGG (SKAPA EN SPECIELL?)
+  def Log.flush
+    Outputter.each_outputter {|outp| outp.flush}
+  end
+
   # Helper functions to be used with a classlog, (first) in the initialize method.
   def init(obj)
     @@logs[@logname].debug "Creating '#{obj.to_s}'." # Use inside def initialize, to get object id

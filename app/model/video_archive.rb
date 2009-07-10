@@ -30,12 +30,14 @@ class Video_archive
   CLASSLOG = Log.new("Class: #{self.name}") # Creates a log named 'Class:' + class name + .log
   CLASSLOG.debug "Loaded class '#{self.name}' from '#{__FILE__}'"
   CLASSLOG.debug "Creating '#{self.to_s}'." # Use inside def initialize, to get object id
+  EMAIL_LOG = Log.new("Email_notification")
+  EMAIL_LOG.add_email_log
+
 
   attr_reader :inbox, :processed, :originals, :unsupported, :failed, :m4ved
 
   def initialize(preferences)
     @rblog = Log.new(__FILE__)
-    CLASSLOG.debug "Initializing #{self.to_s}."
     CLASSLOG.debug "Creating '#{self.to_s}'." # Use inside def initialize, to get object id
 
     set_inbox(preferences.inbox)
@@ -90,6 +92,8 @@ class Video_archive
     setup_archive_directories
 
     process_inbox
+
+    Log.flush   # In case any new files are created, makes the email log send out messages about it.
 
     cleanup_archive_directories
   end
@@ -210,6 +214,7 @@ class Video_archive
       #basename = available_path_for(video).add_extension('m4v').basename
       m4v_video = Handbrake::feed_me(video, @m4ved / basename)
       if m4v_video then
+        EMAIL_LOG.info "Video converted: #{m4v_video.name}"
         video.move_me(@originals) # Move the processed file.
         # Todo TILLFALLIGT BORTKOPPLAD   m4v_video.add_me_to_iTunes
         ### send_email('no-reply@heltenkelt.se', 'iTunes Feeder', 'tommy@heltenkelt.se', 'Tommy Sundstršm', "#{m4v_video.name} added to iTunes", '')

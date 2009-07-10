@@ -7,6 +7,7 @@
 #
 
 require 'osx/cocoa'
+$LOAD_PATH << File.dirname(__FILE__)
 require 'require_app_files'
 require 'pp' # TEST  
 
