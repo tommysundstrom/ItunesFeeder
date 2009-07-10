@@ -1,4 +1,7 @@
 require 'rubygems'
+require 'osx/cocoa'
+
+OSX::NSLog '---------- test started ----------'
 
 # Some paths, etc.
 me = File.expand_path(__FILE__)

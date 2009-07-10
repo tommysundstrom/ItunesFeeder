@@ -9,6 +9,11 @@ require 'osx/cocoa'
 require 'pathstring'
 require 'rubygems'
 require 'log4r'
+###require 'log4r/outputter/syslogoutputter'
+
+# I've tried using the SyslogOutputter, but there is to many strange effects from it. Instead I've worked around it
+# by using OSX::NSLog
+
 
 
 # When this source file is loaded, it cleans out old logs.
@@ -61,16 +66,23 @@ class Log #< OSX::NSObject
   include Log4r
   
   # Constants
-    @@app_name = Pathstring.new(__FILE__).application_name
-    @@formatter = PatternFormatter.new(:pattern => "%d [%5l] %m")  # Format for log entries
-    @@rollover_time = 60*60*24    # 24 h in seconds.
-    @@rollover_size = 100000
-    # TODO: Should remove session logs from previous sessions (on class initiation or in setup)
-    @@log_directory = Pathstring("~/Library/Logs/Ruby/#{@@app_name}").expand_path
-    @@log_directory.mkpath # Makes sure the path exists
+  @@app_name = Pathstring.new(__FILE__).application_name
+  @@formatter = PatternFormatter.new(:pattern => "%d [%5l] %m")  # Format for log entries
+  @@rollover_time = 60*60*24    # 24 h in seconds.
+  @@rollover_size = 100000
+  @@log_directory = Pathstring("~/Library/Logs/Ruby/#{@@app_name}").expand_path
+  @@log_debug_directory = @@log_directory / '_debug'
+  @@log_debug_directory.mkpath # Makes sure the path exists (in the process also ensuring the path for @@Log_directory)
+  ###WARN = 3    # For some reason require 'log4r/outputter/syslogoutputter' destroys these three values
+  ###ERROR = 4
+  ###FATAL = 5
+  ###@@syslog = SyslogOutputter.new('output_syslog_all_info') #, :level => INFO)
+  ###@@syslog.close
+
+  SYSLOG_LEVEL = 2 # = INFO-level
     
   # Class variables
-    @@logs = {}
+  @@logs = {}
 
   # Class methods
   def Log.classlog(classref)
@@ -82,7 +94,7 @@ class Log #< OSX::NSObject
   
   
 
-  
+  #
   def initialize(logname = :default)  # (Normaly logname is a string. Tip: use __FILE__.)
     @logname = logname
     unless @@logs.has_key?(@logname)  # If there is alread a log with the name, use it
@@ -101,17 +113,25 @@ class Log #< OSX::NSObject
       log = Logger.new(@logname)
     end
     
-    # General output, a session log that collects all. TODO: Change format 
-          # so that it's possible to see what log has written what.
-      log.outputters << FileOutputter.new('output_all', :filename => (@@log_directory / "_all.log").to_s, :formatter => @@formatter)
-      
-    # General warnings. A warnings and errors log that all logs are writing to
-      log.outputters << FileOutputter.new('output_warn', :filename => (@@log_directory / "WARNINGS & ERRORS.log").to_s, :formatter => @@formatter, :level => WARN )
-      
+    # Logs for whole application
+    #     A session log that collects all. TODO: Change format so that it's possible to see what log has written what.
+    log.outputters << FileOutputter.new('output_all', :filename => (@@log_debug_directory / "_all.log").to_s, :formatter => @@formatter)
+    #     One that collollects all info and higher (TODO This should also go into the general system log
+    log.outputters << FileOutputter.new('output_all_info', :filename => (@@log_directory / "_all.log").to_s, :formatter => @@formatter, :level => INFO)
+    #     Dito, rolling
+    log.outputters << RollingFileOutputter.new('output_rolling_info', :filename => (@@log_directory / "_all-rolling-.log").to_s, :trunc => false, :formatter => @@formatter, :maxsize => @@rollover_size, :level => INFO )
+    (@@log_directory / "_all-rolling-.log").unlink     # Remove empty log (created but not used, as some kind of sideffect of 'maxsize')
+    #     Dito, to syslog
+    ###log.outputters << @@syslog
+    ###SyslogOutputter.close
+    ###log.outputters << SyslogOutputter.new('output_syslog_all_info', :level => INFO)
+    #     General warnings. A warnings and errors log that all logs are writing to
+    log.outputters << FileOutputter.new('output_all_warn', :filename => (@@log_directory / "__WARNINGS & ERRORS.log").to_s, :formatter => @@formatter, :level => WARN )
+
     #log.outputters.each{|t| puts t.name}  # TEST
       
-    # This log only.
-      log.outputters << file_outputter
+    # Logs for this specific log only
+    log.outputters = log.outputters + file_outputter
       
     # Send result also to stdout  TODO: Remove from unit test runs
     #  std = Outputter.stdout
@@ -124,37 +144,45 @@ class Log #< OSX::NSObject
   
   def setup_default
     # Info output. Just the info messages from this log
-      outputter = file_outputter
-      outputter.level = INFO
+    ##outputter = file_outputter
+    ##outputter.level = INFO
     
     # Rolling log with INFO+
-      @@logs[:default].outputters << RollingFileOutputter.new('output_rolling_info', :filename => (@@log_directory / "_info-rolling-.log").to_s, :trunc => false, :formatter => @@formatter, :maxsize => @@rollover_size, :level => INFO )
-      (@@log_directory / "_info-rolling-.log").unlink     # Remove empty log (created but not used, as some kind of sideffect of 'maxsize')
+      ##@@logs[:default].outputters << RollingFileOutputter.new('output_rolling_info', :filename => (@@log_directory / "_info-rolling-.log").to_s, :trunc => false, :formatter => @@formatter, :maxsize => @@rollover_size, :level => INFO )
+      ##(@@log_directory / "_info-rolling-.log").unlink     # Remove empty log (created but not used, as some kind of sideffect of 'maxsize')
   end
 
   # Outputters doc: http://log4r.sourceforge.net/rdoc/files/log4r/outputter/outputter_rb.html
-    def file_outputter
-      if @logname == :default
-        id = ''
-        filename = '_all'
-      else
-        id = "_#{@logname}"
-        filename = @logname
-      end
-
-      # Making sure the directory exists.
-      #     (Note: The logs are named after the files they are created in. So two identicaly named files (in
-      #     different directories) will overwrite each others logs. )
-      path_to_log = Pathstring(File.join(@@log_directory, File.basename(filename) + ".log"))
-      d = path_to_log.dirname
-      Pathstring(d).mkpath
-
-      # OSX::NSLog "f: #{path_to_log}"
-
-      # Creating outputter
-      outputter = FileOutputter.new("output_all#{id}", :filename => (path_to_log).to_s, :formatter => @@formatter)
-      return outputter
+  def file_outputter
+    if @logname == :default
+      id = ''
+      filename = '_all'
+    else
+      id = "_#{@logname}"
+      filename = @logname
     end
+
+    # Making sure the directory exists.
+    #     (Note: The logs are named after the files they are created in. So two identicaly named files (in
+    #     different directories) will overwrite each others logs. )
+    @@log_debug_directory.mkpath
+    #log_path = Pathstring(File.join(@@log_directory, File.basename(filename) + ".log"))
+    #log_dir =
+    #log_debug_dir =
+    #d = log_path.dirname
+    #Pathstring(d).mkpath
+
+    # OSX::NSLog "f: #{path_to_log}"
+
+    # Creating outputter
+    outputters = []
+    #   For everything
+    outputters << FileOutputter.new("output_all#{id}", :filename => (@@log_debug_directory / (File.basename(filename) + '.log')).to_s, :formatter => @@formatter)
+    #   For info and higher
+    outputters << FileOutputter.new("output_info#{id}", :filename => (@@log_directory / (File.basename(filename) + '.log')).to_s, :formatter => @@formatter, :level => INFO)
+    #outputter = FileOutputter.new("output_all#{id}", :filename => (log_path).to_s, :formatter => @@formatter)
+    return outputters
+  end
       
   # Helper functions to be used with a classlog, (first) in the initialize method.
   def init(obj)
@@ -170,48 +198,58 @@ class Log #< OSX::NSObject
   def Log.debug(msg)
     Log.ensure_default_log
     @@logs[:default].debug(msg)
+    OSX::NSLog '(DEBUG) ' + msg if SYSLOG_LEVEL == DEBUG
   end
   
   def Log.info(msg)
     Log.ensure_default_log
     @@logs[:default].info(msg)
+    OSX::NSLog '( INFO) ' + msg if SYSLOG_LEVEL <= INFO
   end
   
   def Log.warn(msg)
     Log.ensure_default_log
     @@logs[:default].warn(msg)
+    OSX::NSLog '( WARN) ' + msg if SYSLOG_LEVEL <= WARN
   end
   
   def Log.error(msg)
     Log.ensure_default_log
     @@logs[:default].error(msg)
+    OSX::NSLog '(ERROR) ' + msg if SYSLOG_LEVEL <= ERROR
   end
   
   def Log.fatal(msg)
     Log.ensure_default_log
     @@logs[:default].fatal(msg)
+    OSX::NSLog '(FATAL) ' + msg if SYSLOG_LEVEL <= FATAL
   end
   
 
   
   def debug(msg)
     @@logs[@logname].debug(msg)
+    OSX::NSLog '(DEBUG) ' + msg if SYSLOG_LEVEL == DEBUG
   end
   
   def info(msg)
     @@logs[@logname].info(msg)
+    OSX::NSLog '( INFO) ' + msg if SYSLOG_LEVEL <= INFO
   end
   
   def warn(msg)
     @@logs[@logname].warn(msg)
+    OSX::NSLog '( WARN) ' + msg if SYSLOG_LEVEL <= WARN
   end
   
   def error(msg)
     @@logs[@logname].error(msg)
+    OSX::NSLog '(ERROR) ' + msg if SYSLOG_LEVEL <= ERROR
   end
   
   def fatal(msg)
     @@logs[@logname].fatal(msg)
+    OSX::NSLog '(FATAL) ' + msg if SYSLOG_LEVEL <= FATAL
   end 
   
   

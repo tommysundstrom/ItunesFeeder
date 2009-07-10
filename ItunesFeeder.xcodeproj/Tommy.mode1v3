@@ -197,7 +197,48 @@
 	<key>Notifications</key>
 	<array/>
 	<key>OpenEditors</key>
-	<array/>
+	<array>
+		<dict>
+			<key>Content</key>
+			<dict>
+				<key>PBXProjectModuleGUID</key>
+				<string>65C853A710079E8B00D5998D</string>
+				<key>PBXProjectModuleLabel</key>
+				<string>main.m</string>
+				<key>PBXSplitModuleInNavigatorKey</key>
+				<dict>
+					<key>Split0</key>
+					<dict>
+						<key>PBXProjectModuleGUID</key>
+						<string>65C853A810079E8B00D5998D</string>
+						<key>PBXProjectModuleLabel</key>
+						<string>main.m</string>
+						<key>_historyCapacity</key>
+						<integer>40</integer>
+						<key>bookmark</key>
+						<string>65C853A910079E8B00D5998D</string>
+						<key>history</key>
+						<array>
+							<string>65C853A410079E8300D5998D</string>
+						</array>
+					</dict>
+					<key>SplitCount</key>
+					<string>1</string>
+				</dict>
+				<key>StatusBarVisibility</key>
+				<true/>
+			</dict>
+			<key>Geometry</key>
+			<dict>
+				<key>Frame</key>
+				<string>{{0, 20}, {1463, 770}}</string>
+				<key>PBXModuleWindowStatusBarHidden2</key>
+				<false/>
+				<key>RubberWindowFrame</key>
+				<string>192 67 1463 811 0 0 1440 878 </string>
+			</dict>
+		</dict>
+	</array>
 	<key>PerspectiveWidths</key>
 	<array>
 		<integer>-1</integer>
@@ -269,20 +310,20 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateExpansionKey</key>
 							<array>
 								<string>29B97314FDCFA39411CA2CEA</string>
-								<string>652C4D56100692FC004E6335</string>
-								<string>65C848911006975500D5998D</string>
-								<string>65C848981006975500D5998D</string>
+								<string>29B97315FDCFA39411CA2CEA</string>
 								<string>29B97317FDCFA39411CA2CEA</string>
 								<string>1C37FABC05509CD000000102</string>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>34</integer>
+									<integer>10</integer>
+									<integer>8</integer>
+									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 98}, {186, 440}}</string>
+							<string>{{0, 0}, {186, 440}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -326,10 +367,6 @@
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
 										<string>InfoPlist.strings</string>
-										<key>_historyCapacity</key>
-										<integer>40</integer>
-										<key>bookmark</key>
-										<string>65C8536610069AB700D5998D</string>
 										<key>history</key>
 										<array>
 											<string>652C4D2710068FBB004E6335</string>
@@ -343,7 +380,6 @@
 											<string>652C4C87100645C1004E6335</string>
 											<string>652C4D6410069737004E6335</string>
 											<string>652C4D6510069737004E6335</string>
-											<string>65C8536510069AB700D5998D</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -401,9 +437,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>65C8536710069AB700D5998D</string>
+				<string>65C853A510079E8B00D5998D</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>65C8536810069AB700D5998D</string>
+				<string>65C853A610079E8B00D5998D</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -537,10 +573,8 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>6510B22E0FF6A4EA00672B62</string>
-		<string>1CD10A99069EF8BA00B06720</string>
-		<string>1C78EAAD065D492600B07095</string>
 		<string>/Users/Tommy/Programmering/Ruby/Projekt/ItunesFeeder/ItunesFeeder.xcodeproj</string>
+		<string>65C853A710079E8B00D5998D</string>
 	</array>
 	<key>WindowString</key>
 	<string>252 301 962 499 0 0 1440 878 </string>
@@ -633,7 +667,7 @@
 			<key>WindowToolGUID</key>
 			<string>6510B22E0FF6A4EA00672B62</string>
 			<key>WindowToolIsVisible</key>
-			<false/>
+			<true/>
 		</dict>
 		<dict>
 			<key>FirstTimeWindowDisplayed</key>

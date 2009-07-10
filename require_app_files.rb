@@ -38,7 +38,7 @@ module Require_app_files
       # TODO: Check for a 'special' method in it, that can be used to adjust the handling
 
       $LOAD_PATH << context_dir
-      OSX::NSLog "Added '#{context_dir}' to $LOAD_PATH"
+      # OSX::NSLog "Added '#{context_dir}' to $LOAD_PATH"
 
       # Recursively do the same with sub-folders
       Dir.entries(context_dir).select do |basename|
@@ -74,7 +74,7 @@ module Require_app_files
       rbfiles -= [ File.basename(__FILE__) ] # Ignore any file named 'rb_main.rb'
       # TODO: IMPORTANT: Must change working dir. (Remember it and restore it at root level.)
       # CORRECTION As long as every dir is added to LOAD_PATH it is not needed.
-      OSX::NSLog "Requiring rb-files inside '#{context_dir}':"
+      # OSX::NSLog "Requiring rb-files inside '#{context_dir}':"
       rbfiles.each do |basename|
         result = require( File.basename(basename, '.rb')) # requires file name, without rb extension. (This is the most usual
               # way to require, so I do this in order to avoid double-requirements.)

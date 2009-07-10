@@ -26,7 +26,7 @@
 				PBXFileTableDataSourceColumnWidthsKey = (
 					200,
 					200,
-					325,
+					324.58349609375,
 				);
 				PBXFileTableDataSourceColumnsKey = (
 					PBXBookmarksDataSource_LocationID,
@@ -96,8 +96,8 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 268867413;
-			PBXWorkspaceStateSaveDate = 268867413;
+			PBXPerProjectTemplateStateSaveDate = 268934777;
+			PBXWorkspaceStateSaveDate = 268934777;
 		};
 		perUserProjectItems = {
 			6510BCF90FF765E700672B62 = 6510BCF90FF765E700672B62 /* PBXTextBookmark */;
@@ -112,12 +112,21 @@
 			652C4D6410069737004E6335 = 652C4D6410069737004E6335 /* PBXTextBookmark */;
 			652C4D6510069737004E6335 = 652C4D6510069737004E6335 /* PBXTextBookmark */;
 			652C4D6610069737004E6335 = 652C4D6610069737004E6335 /* PBXTextBookmark */;
-			65C8536410069AB700D5998D /* PBXTextBookmark */ = 65C8536410069AB700D5998D /* PBXTextBookmark */;
-			65C8536510069AB700D5998D /* PBXTextBookmark */ = 65C8536510069AB700D5998D /* PBXTextBookmark */;
-			65C8536610069AB700D5998D /* PBXTextBookmark */ = 65C8536610069AB700D5998D /* PBXTextBookmark */;
+			65C8536410069AB700D5998D = 65C8536410069AB700D5998D /* PBXTextBookmark */;
+			65C8536510069AB700D5998D = 65C8536510069AB700D5998D /* PBXTextBookmark */;
+			65C8536610069AB700D5998D = 65C8536610069AB700D5998D /* PBXTextBookmark */;
+			65C853A410079E8300D5998D /* PBXBookmark */ = 65C853A410079E8300D5998D /* PBXBookmark */;
+			65C853A910079E8B00D5998D /* PBXTextBookmark */ = 65C853A910079E8B00D5998D /* PBXTextBookmark */;
 		};
 		sourceControlManager = 65B0BE560F5000A800171B6D /* Source Control */;
 		userBuildSettings = {
+		};
+	};
+	29B97316FDCFA39411CA2CEA /* main.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1404, 754}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 297}";
 		};
 	};
 	4DDCA7030ACC9A6100E082CE /* ItunesFeeder */ = {
@@ -137,11 +146,6 @@
 		name = InfoPlist.strings;
 		path = /Users/Tommy/Programmering/Ruby/Projekt/ItunesFeeder/English.lproj/InfoPlist.strings;
 		sourceTree = "<absolute>";
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {693, 240}}";
-			sepNavSelRange = "{45, 175}";
-			sepNavVisRange = "{0, 221}";
-		};
 	};
 	6510B2450FF6D1B900672B62 /* __init__.rb */ = {
 		isa = PBXFileReference;
@@ -352,6 +356,20 @@
 		rLoc = 45;
 		rType = 0;
 		vrLen = 221;
+		vrLoc = 0;
+	};
+	65C853A410079E8300D5998D /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
+	};
+	65C853A910079E8B00D5998D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
+		name = "main.m: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 297;
 		vrLoc = 0;
 	};
 	E8F5E25803AEB7C803A81C6F /* rb_main.rb */ = {
