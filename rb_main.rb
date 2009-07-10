@@ -11,10 +11,10 @@ require 'require_app_files'
 require 'pp' # TEST  
 
 def rb_main_init
-  OSX::NSLog "rb_main_init" # TEST
-  pp 'ARGV:'
-  pp ARGV
-  OSX::NSLog "#{ARGV}"
+  ##OSX::NSLog "rb_main_init" # TEST
+  ##pp 'ARGV:'  # TEST
+  ##pp ARGV
+  ##OSX::NSLog "#{ARGV}"
 =begin  # Moved to rb_main_tommys_extra_init  $LOAD_PATH << File.dirname(File.expand_path(__FILE__)) # TEST
   $LOAD_PATH << File.dirname(File.join(File.dirname(File.expand_path(__FILE__)), 'standardutilities')) # TEST
   pp $LOAD_PATH

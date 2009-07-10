@@ -197,48 +197,7 @@
 	<key>Notifications</key>
 	<array/>
 	<key>OpenEditors</key>
-	<array>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
-				<string>65C853A710079E8B00D5998D</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>main.m</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>65C853A810079E8B00D5998D</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>main.m</string>
-						<key>_historyCapacity</key>
-						<integer>40</integer>
-						<key>bookmark</key>
-						<string>65C853A910079E8B00D5998D</string>
-						<key>history</key>
-						<array>
-							<string>65C853A410079E8300D5998D</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {1463, 770}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>192 67 1463 811 0 0 1440 878 </string>
-			</dict>
-		</dict>
-	</array>
+	<array/>
 	<key>PerspectiveWidths</key>
 	<array>
 		<integer>-1</integer>
@@ -573,8 +532,9 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>/Users/Tommy/Programmering/Ruby/Projekt/ItunesFeeder/ItunesFeeder.xcodeproj</string>
+		<string>1CD10A99069EF8BA00B06720</string>
 		<string>65C853A710079E8B00D5998D</string>
+		<string>/Users/Tommy/Programmering/Ruby/Projekt/ItunesFeeder/ItunesFeeder.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>252 301 962 499 0 0 1440 878 </string>
@@ -776,13 +736,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1CD10A99069EF8BA00B06720</string>
-				<string>65C853411006988100D5998D</string>
+				<string>65C853AF1007A86300D5998D</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>65C853421006988100D5998D</string>
-				<string>65C853431006988100D5998D</string>
-				<string>65C853441006988100D5998D</string>
-				<string>65C853451006988100D5998D</string>
-				<string>65C853461006988100D5998D</string>
+				<string>65C853B01007A86300D5998D</string>
+				<string>65C853B11007A86300D5998D</string>
+				<string>65C853B21007A86300D5998D</string>
+				<string>65C853B31007A86300D5998D</string>
+				<string>65C853B41007A86300D5998D</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>

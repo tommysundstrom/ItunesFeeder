@@ -15,6 +15,9 @@
 		addToTargets = (
 			4DDCA7030ACC9A6100E082CE /* ItunesFeeder */,
 		);
+		breakpoints = (
+			65C853AB1007A4C800D5998D /* main.m:14 */,
+		);
 		codeSenseManager = 65B0BE570F5000A800171B6D /* Code sense */;
 		executables = (
 			65B0BE500F50009E00171B6D /* «PROJECTNAME» */,
@@ -117,6 +120,7 @@
 			65C8536610069AB700D5998D = 65C8536610069AB700D5998D /* PBXTextBookmark */;
 			65C853A410079E8300D5998D /* PBXBookmark */ = 65C853A410079E8300D5998D /* PBXBookmark */;
 			65C853A910079E8B00D5998D /* PBXTextBookmark */ = 65C853A910079E8B00D5998D /* PBXTextBookmark */;
+			65C853AC1007A4D000D5998D /* PBXTextBookmark */ = 65C853AC1007A4D000D5998D /* PBXTextBookmark */;
 		};
 		sourceControlManager = 65B0BE560F5000A800171B6D /* Source Control */;
 		userBuildSettings = {
@@ -125,8 +129,9 @@
 	29B97316FDCFA39411CA2CEA /* main.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1404, 754}}";
-			sepNavSelRange = "{0, 0}";
+			sepNavSelRange = "{250, 17}";
 			sepNavVisRange = "{0, 297}";
+			sepNavWindowFrame = "{{192, 11}, {1463, 867}}";
 		};
 	};
 	4DDCA7030ACC9A6100E082CE /* ItunesFeeder */ = {
@@ -298,7 +303,7 @@
 		argumentStrings = (
 		);
 		autoAttachOnCrash = 1;
-		breakpointsEnabled = 0;
+		breakpointsEnabled = 1;
 		configStateDict = {
 		};
 		customDataFormattersEnabled = 1;
@@ -368,6 +373,32 @@
 		name = "main.m: 1";
 		rLen = 0;
 		rLoc = 0;
+		rType = 0;
+		vrLen = 297;
+		vrLoc = 0;
+	};
+	65C853AB1007A4C800D5998D /* main.m:14 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 29B97316FDCFA39411CA2CEA /* main.m */;
+		functionName = "main()";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 14;
+		modificationTime = 268936392.664007;
+		state = 1;
+	};
+	65C853AC1007A4D000D5998D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
+		name = "main.m: 14";
+		rLen = 17;
+		rLoc = 250;
 		rType = 0;
 		vrLen = 297;
 		vrLoc = 0;
