@@ -4,6 +4,7 @@
 #  Created by Tommy Sundström on 12/3-09.
 #  Copyright (c) 2009 Helt Enkelt ab. All rights reserved.
 #
+# See require_app_files for example of usage
 
 require 'osx/cocoa'
 require 'pathstring'
@@ -68,43 +69,63 @@ clean_out_log_directory(logdir)
 # it with something using Mail.app.
 class Log #< OSX::NSObject
   include Log4r
-  
-  # Constants
-  @@app_name = Pathstring.new(__FILE__).application_name
-  @@formatter = PatternFormatter.new(:pattern => "%d [%5l] %m")  # Format for log entries
-  @@rollover_time = 60*60*24    # 24 h in seconds.
-  @@rollover_size = 100000
-  @@log_directory = Pathstring("~/Library/Logs/Ruby/#{@@app_name}").expand_path
-  @@log_debug_directory = @@log_directory / '_debug'
-  @@log_debug_directory.mkpath # Makes sure the path exists (in the process also ensuring the path for @@Log_directory)
-  ###WARN = 3    # For some reason require 'log4r/outputter/syslogoutputter' destroys these three values
-  ###ERROR = 4
-  ###FATAL = 5
-  ###@@syslog = SyslogOutputter.new('output_syslog_all_info') #, :level => INFO)
-  ###@@syslog.close
 
-  SYSLOG_LEVEL = 2 # = INFO-level
+  attr_accessor :class_name
+
+  # Settings
+  SYSLOG_LEVEL = 2 # 2 = INFO-level. Show anything with this level or higher in the OSX::NSLog
+
+  # Constants
+  begin
+  @@app_name = Pathstring.new(__FILE__).application_name
+    @@formatter = PatternFormatter.new(:pattern => "%d [%5l] %m")  # Format for log entries
+    @@rollover_time = 60*60*24    # 24 h in seconds.
+    @@rollover_size = 100000
+    @@log_directory = Pathstring("~/Library/Logs/Ruby/#{@@app_name}").expand_path
+    @@log_debug_directory = @@log_directory / '_debug'
+    @@log_debug_directory.mkpath # Makes sure the path exists (in the process also ensuring the path for @@Log_directory)
+  end
+
+  # Outputters
+  begin
+    #     A session log that collects all. TODO: Change format so that it's possible to see what log has written what.
+    @@outputter_all = FileOutputter.new('output_all', :filename => (@@log_debug_directory / "__DEBUG.log").to_s, :formatter => @@formatter)
+    #     One that collollects all info and higher (TODO This should also go into the general system log
+    @@outputter_all_info = FileOutputter.new('output_all_info', :filename => (@@log_directory / "__INFO.log").to_s, :formatter => @@formatter, :level => INFO)
+    #     Dito, rolling
+    @@outputter_all_info_rolling = RollingFileOutputter.new('output_all_info_rolling', :filename => (@@log_directory / "__INFO_rolling-.log").to_s, :trunc => false, :formatter => @@formatter, :maxsize => @@rollover_size, :level => INFO )
+    (@@log_directory / "__INFO_rolling-.log").unlink     # Remove empty log (created but not used, as some kind of sideffect of 'maxsize')
+    #     Dito, to syslog
+    ###log.outputters << @@syslog
+    ###SyslogOutputter.close
+    ###log.outputters << SyslogOutputter.new('output_syslog_all_info', :level => INFO)
+    #     General warnings. A warnings and errors log that all logs are writing to
+    @@outputter_all_warning = FileOutputter.new('output_all_warn', :filename => (@@log_directory / "__WARNINGS & ERRORS.log").to_s, :formatter => @@formatter, :level => WARN )
+  end
     
   # Class variables
   @@logs = {}
 
   # Class methods
   def Log.classlog(classref)
-    log = Log.new("Class: #{classref.name}") # Creates a log named 'Class:' + class name + .log
+    log = Log.new("#{classref.class.name}: #{classref.name}") # Creates a log named 'Class:' + class name + .log
+          # (Or 'Module:...')
+    log.class_name = classref.name
     log.debug "Loaded class '#{classref.name}' " # from '#{classref.__FILE__}'"
     return log
     # There is also an instance method, init, to be used in the initialize method of the class.
   end
-  
-  
 
   #
   def initialize(logname = :default)  # (Normaly logname is a string. Tip: use __FILE__.)
     @logname = logname
+    @class_name = ''    # Used by by Log.classlog
     unless @@logs.has_key?(@logname)  # If there is alread a log with the name, use it
       setup_log
       setup_default if @logname == :default 
     end
+    #@@logs[logname].class_name => ''  # Making sure there is a entry for the class_name. Will
+          # often be filled by Log.classlog
   end
   
   def setup_log
@@ -118,24 +139,14 @@ class Log #< OSX::NSObject
     end
     
     # Logs for whole application
-    #     A session log that collects all. TODO: Change format so that it's possible to see what log has written what.
-    log.outputters << FileOutputter.new('output_all', :filename => (@@log_debug_directory / "_all.log").to_s, :formatter => @@formatter)
-    #     One that collollects all info and higher (TODO This should also go into the general system log
-    log.outputters << FileOutputter.new('output_all_info', :filename => (@@log_directory / "_all.log").to_s, :formatter => @@formatter, :level => INFO)
-    #     Dito, rolling
-    log.outputters << RollingFileOutputter.new('output_rolling_info', :filename => (@@log_directory / "_all-rolling-.log").to_s, :trunc => false, :formatter => @@formatter, :maxsize => @@rollover_size, :level => INFO )
-    (@@log_directory / "_all-rolling-.log").unlink     # Remove empty log (created but not used, as some kind of sideffect of 'maxsize')
-    #     Dito, to syslog
-    ###log.outputters << @@syslog
-    ###SyslogOutputter.close
-    ###log.outputters << SyslogOutputter.new('output_syslog_all_info', :level => INFO)
-    #     General warnings. A warnings and errors log that all logs are writing to
-    log.outputters << FileOutputter.new('output_all_warn', :filename => (@@log_directory / "__WARNINGS & ERRORS.log").to_s, :formatter => @@formatter, :level => WARN )
+    log.outputters << @@outputter_all
+    log.outputters << @@outputter_all_info
+    log.outputters << @@outputter_all_info_rolling
+    log.outputters << @@outputter_all_warning
 
-    #log.outputters.each{|t| puts t.name}  # TEST
       
     # Logs for this specific log only
-    log.outputters = log.outputters + file_outputter
+    log.outputters += file_outputter
       
     # Send result also to stdout  TODO: Remove from unit test runs
     #  std = Outputter.stdout
@@ -249,30 +260,38 @@ class Log #< OSX::NSObject
   end
   
 
-  
+  def message(msg)
+    if @class_name > ''
+      return "[#{@class_name}]  #{msg}"
+    else
+      return msg
+    end
+  end
+
   def debug(msg)
-    @@logs[@logname].debug(msg)
-    OSX::NSLog '(DEBUG) ' + msg if SYSLOG_LEVEL == DEBUG
+    @@logs[@logname].debug(message(msg))
+    #@@logs[@logname].debug(msg)
+    OSX::NSLog '(DEBUG) ' + message(msg) if SYSLOG_LEVEL == DEBUG
   end
   
   def info(msg)
-    @@logs[@logname].info(msg)
-    OSX::NSLog '( INFO) ' + msg if SYSLOG_LEVEL <= INFO
+    @@logs[@logname].info(message(msg))
+    OSX::NSLog '( INFO) ' + message(msg) if SYSLOG_LEVEL <= INFO
   end
   
   def warn(msg)
-    @@logs[@logname].warn(msg)
-    OSX::NSLog '( WARN) ' + msg if SYSLOG_LEVEL <= WARN
+    @@logs[@logname].warn(message(msg))
+    OSX::NSLog '( WARN) ' + message(msg) if SYSLOG_LEVEL <= WARN
   end
   
   def error(msg)
-    @@logs[@logname].error(msg)
-    OSX::NSLog '(ERROR) ' + msg if SYSLOG_LEVEL <= ERROR
+    @@logs[@logname].error(message(msg))
+    OSX::NSLog '(ERROR) ' + message(msg) if SYSLOG_LEVEL <= ERROR
   end
   
   def fatal(msg)
-    @@logs[@logname].fatal(msg)
-    OSX::NSLog '(FATAL) ' + msg if SYSLOG_LEVEL <= FATAL
+    @@logs[@logname].fatal(message(msg))
+    OSX::NSLog '(FATAL) ' + message(msg) if SYSLOG_LEVEL <= FATAL
   end 
   
   

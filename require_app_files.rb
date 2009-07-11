@@ -4,12 +4,14 @@
 
 require 'osx/cocoa'
 require 'rubygems'  # (not used here, but will probably come in useful in a lot of places.
-
+$LOAD_PATH << File.join(File.dirname(__FILE__), 'app/standardutilities') # To be able to require log
+require 'log'
 
 #OSX::NSLog "require_app_files loaded" # TEST
 
 module Require_app_files
-  NAMEBODYS = []   # Used to check aginst duplicate names.
+  LOG = Log::classlog(self)
+  NAMEBODYS = []   # Used to check aginst duplicate names.  
 
   # Add app-dir and all its sub-dirs to $LOAD_PATH
   def Require_app_files.add_to_load_path(context_dir)
@@ -18,7 +20,7 @@ module Require_app_files
 
     $LOAD_PATH << context_dir   # TODO (9) Add mechanism for excluding a dir (maybe by adding a __not_in_loadpath__
           # file to it.
-    OSX::NSLog "Added '#{context_dir}' to $LOAD_PATH"
+    LOG.debug "Added '#{context_dir}' to $LOAD_PATH"
 
     # Recursively do the same with sub-folders
     begin
@@ -48,11 +50,9 @@ module Require_app_files
       rbfiles = Dir.entries(context_dir).select {|x| /\.rb\z/ =~ x}
       # rbfiles -= [ '__init__.rb' ] # Ignore any file named '__init__.rb'
       # Paths in rbfiles are loacal, but as long as every dir is added to LOAD_PATH it is not needed to change working dir.
-      OSX::NSLog "Requiring rb-files inside '#{context_dir}':"  # TEST
+      LOG.debug "Requiring rb-files inside '#{context_dir}':"  # TEST
       rbfiles.each do |basename|
-        OSX::NSLog "namebodys: #{NAMEBODYS.to_a}" # TEST
         namebody = File.basename(basename, '.rb')
-        OSX::NSLog "namebody: #{namebody}" # TEST
         if NAMEBODYS.index(namebody) == nil  
           NAMEBODYS << namebody
         else
@@ -61,9 +61,8 @@ module Require_app_files
         end
         result = require(namebody) # requires file name, without rb extension. (This is the most usual
               # way to require, so I do this in order to avoid double-requirements.)
-        OSX::NSLog "  Required '#{namebody}'#{if result == false then ' (but it had apparently already been required)' end}." # TEST
+        LOG.debug "  Required '#{namebody}'#{if result == false then ' (but it had apparently already been required)' end}." # TEST
       end
-      OSX::NSLog '---'  # TEST
     end 
 
     # Recursively do the same with sub-folders
