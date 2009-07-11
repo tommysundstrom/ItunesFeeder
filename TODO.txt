@@ -1,5 +1,7 @@
 TODO
 
+* Remove the __init__thing and just load anything in the app folder.  
+
 * Emptying infolder when something is not moved from there by the handlers. (Sort of a final sweep - take everything thats left and put in an 'unsolved' box.) The folder should be empty, so this should trigger a warning.
 
 * mpeg-test remains
@@ -9,3 +11,5 @@ TODO
 * Cleanup the general mess in method_video.move_me
 
 * gem isolation (check the book and example files to figure out how it should work)
+
+* Use Mail.app for email notification.
