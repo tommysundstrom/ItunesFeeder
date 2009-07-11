@@ -63,6 +63,9 @@ clean_out_log_directory(logdir)
 # Can be used both directly (Log.debug "Message")
 # and to produce logs, local_log = Log(__FILE__) 
 # or Log(__FILE__).debug "Message"
+#
+# Note. There is a email logger in here that may or may not function properly. My intent is to replace
+# it with something using Mail.app.
 class Log #< OSX::NSObject
   include Log4r
   
