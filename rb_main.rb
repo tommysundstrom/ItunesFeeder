@@ -32,15 +32,14 @@ def rb_main_init
 
   # OSX::NSLog "Orignal rb_main.rb extended with some additons by Tommy"
 
-  # Require and load files Python init-style
+  # Require and load files
   context = __FILE__
   #context = OSX::NSBundle.mainBundle.resourcePath.fileSystemRepresentation # The resource dir of the app. (This
         # is always (?) the dir where this file (rb_main.rb) is.)
-
-  app_root = Require_app_files::application_files_directory(File.dirname(context))
-  Require_app_files::add_to_load_path_if_has_init(app_root)
+  app_root = File.join(File.dirname(context), 'app')
+  Require_app_files::add_to_load_path(app_root)
   Require_app_files::require_standardutilities
-  Require_app_files::require_if_in_dir_with_init(app_root)
+  Require_app_files::require_all(app_root)
 end
 
 if $0 == __FILE__ then
